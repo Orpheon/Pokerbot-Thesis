@@ -1372,7 +1372,7 @@
 
 %% ---- CHAPTER HEADINGS -----------------------------------------------
 % Change the chapter headings to uppercase.
-\renewcommand{\@chapapp}{CHAPTER}
+\renewcommand{\@chapapp}{SECTION}
 
 % Change the formatting of the first page of each chapter.
 \renewcommand{\@makechapterhead}[1]{%
@@ -1499,7 +1499,7 @@
  \renewcommand{\thepage}{\arabic{page}} %
  % Add the word 'Chapter' to the table of contents.
  \addtocontents{toc}{\vspace{1.3ex}\noindent %
- {\bf Chapters}\vspace{1.3ex}} %
+ {\bf Sections}\vspace{1.3ex}} %
  % Use the correct formatting.
  \if@umich@thesis %
   % Use 1.5 spacing
