@@ -270,6 +270,7 @@
 % The fields to be used for the title page
 \renewcommand{\@title}{Insert a Title!}
 \renewcommand{\@author}{Insert an Author!}
+\newcommand{\@secondauthor}{Insert an Author!}
 \newcommand{\@degree}{Doctor of Philosophy}
 \newcommand{\@department}{Insert a Department Name!}
 \newcommand{\@committee}{Insert a Committee!}
@@ -279,6 +280,7 @@
 % Commands to set the titlepage fields
 \renewcommand{\title}[1]{\renewcommand{\@title}{#1}}
 \renewcommand{\author}[1]{\renewcommand{\@author}{#1}}
+\newcommand{\secondauthor}[1]{\renewcommand{\@secondauthor}{#1}}
 \newcommand{\degree}[1]{\renewcommand{\@degree}{#1}}
 \newcommand{\department}[1]{\renewcommand{\@department}{#1}}
 \newcommand{\committee}[1]{\renewcommand{\@committee}{#1}}
@@ -288,6 +290,7 @@
 % Commands for the user to be able to use the defined fields.
 \newcommand{\inserttitle}{\@title}
 \newcommand{\insertauthor}{\@author}
+\newcommand{\insertsecondauthor}{\@secondauthor}
 \newcommand{\insertdegree}{\@degree}
 \newcommand{\insertdepartment}{\@department}
 \newcommand{\insertcommittee}{\@committee}
@@ -315,18 +318,19 @@
 %   \vfill %
    % Print the word 'by'.
    by \\[2ex] %
-   % Insert the author
+   % Insert the authors
    \insertauthor \\ %
+   \insertsecondauthor \\ %
    % More rubber space
    \vfill %
    % Text from guidelines
    A dissertation submitted in partial fulfillment \\ %
    of the requirements for the degree of \\ %
    % Name of degree
-   \insertdegree \\ %
+   \insertdegree \\[4ex] %
    % Department
-   (\insertdepartment) \\ %
-   in the University of Michigan \\ %
+   \insertdepartment \\ %
+   University of Applied Sciences and Arts \\ Northwestern Switzerland \\ %
    % Year of completion
    \number\year %
   \end{center} %
@@ -378,10 +382,13 @@
 %% ---- COPYRIGHT PAGE -------------------------------------------------
 % Commands for copyright holder's contact information
 \newcommand{\@email}{Insert your email address!}
+\newcommand{\@secondemail}{Insert your email address!}
 \newcommand{\@orcid}{}
 \newcommand{\email}[1]{\renewcommand{\@email}{#1}}
+\newcommand{\secondemail}[1]{\renewcommand{\@secondemail}{#1}}
 \newcommand{\orcid}[1]{\renewcommand{\@orcid}{#1}}
 \newcommand{\insertemail}{\@email}
+\newcommand{\insertsecondemail}{\@secondemail}
 \newcommand{\insertorcid}{\@orcid}
 
 % Command that holds the name of the copyright holder
@@ -404,11 +411,11 @@
   % Insert the author's name
   \@author \\[1ex] %
   % Insert the author's email address
-  \@email \\[1ex] %
-  % Insert the author's ORCID iD
-  ORCID iD: \space \@orcid \\[3ex] %
+  \texttt{\@email} \\[1ex] %
+  \@secondauthor \\[1ex] %
+  \texttt{\@secondemail} \\[1ex]
   % The year of publication
-  \copyright \space \insertcopyrightholder \space \number\year %
+  \number\year %
   % Vertical rubber space
   \vfill %
  \end{center} %
@@ -1492,7 +1499,7 @@
  \renewcommand{\thepage}{\arabic{page}} %
  % Add the word 'Chapter' to the table of contents.
  \addtocontents{toc}{\vspace{1.3ex}\noindent %
- {\bf Chapter}\vspace{1.3ex}} %
+ {\bf Chapters}\vspace{1.3ex}} %
  % Use the correct formatting.
  \if@umich@thesis %
   % Use 1.5 spacing
