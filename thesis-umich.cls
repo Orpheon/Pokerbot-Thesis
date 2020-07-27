@@ -338,13 +338,14 @@
 
     \vfill
     
-   
-  Committee:\\[2ex] %
-  \begin{varwidth}{\textwidth}
-    \begin{flushleft}
-      \insertcommittee
-    \end{flushleft}
-  \end{varwidth}
+    Committee:\\[2ex] %
+    \begin{varwidth}{\textwidth}
+        \begin{flushleft}
+          \insertcommittee
+        \end{flushleft}
+    \end{varwidth}
+    
+  \end{center}
 
  \end{singlespace} %
 }
