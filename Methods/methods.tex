@@ -7,6 +7,7 @@
 -Definition of agent, environment, policy, and reward
 -Concept of time discounting, and why we don't care about it
 -Action space of poker
+(\cite{SpinningUp2018})
 
 \subsection{Q-Learning}
 -Definition of Q-function
@@ -15,6 +16,7 @@
 -variants we used in our engine
 
 \subsection{Soft Actor-Critic}
+\cite{SAC_main}
 -Basic ideas behind SAC:
     -policy network + value network
     -train value network on outcomes, train policy network on value network
@@ -24,7 +26,7 @@
 -Parameters
 
 \section{Skill Metrics}
--TrueSkill
+-TrueSkill (\cite{TrueSkill_original}, \cite{TrueSkill_blog})
 -percentile scores
 -total earnings
 -performance against player subset
@@ -36,6 +38,8 @@
 -Need for a fast engine that allowed batching
     -hence, own engine
 -pypokerengine too slow
--Treys
--
-\section{Strategy Space Plotting}
+-Treys (\cite{Treys})
+\section{Strategy Analysis}
+-Aggression and Tightness (\cite{PokerStrategy})
+-Strategy vector computation
+    -lack of interpretability when plotted raw
