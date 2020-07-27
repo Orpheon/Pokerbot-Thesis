@@ -196,6 +196,8 @@
  \RequirePackage{multicol}
 \fi
 
+\RequirePackage{varwidth}
+
 
 %% ---- FORMATTING -----------------------------------------------------
 % Set the page style to fancy.
@@ -333,18 +335,17 @@
    University of Applied Sciences and Arts \\ Northwestern Switzerland \\ %
    % Year of completion
    \number\year %
-  \end{center} %
-  % More rubber space
-  \vfill %
-  % Non-justified content
-  \begin{flushleft}
-   % Heading for the committee
-   \hspace{1in}Doctoral Committee: \\[2ex] %
-   % Horizontal spacing
-   \hspace{1.5in} %
-   % Insert the committee (in a box).
-   \parbox{4.2in}{\insertcommittee}
-  \end{flushleft} %
+
+    \vfill
+    
+   
+  Committee:\\[2ex] %
+  \begin{varwidth}{\textwidth}
+    \begin{flushleft}
+      \insertcommittee
+    \end{flushleft}
+  \end{varwidth}
+
  \end{singlespace} %
 }
 
