@@ -1,45 +1,24 @@
-\chapter{Methods}
+\chapter{Theoretical Methods}
 
-\section{Leagues}
+
+\section{Poker}
+
+\subsection{Competition Rules}
+
+\subsection{Basic Strategy}
 
 \section{Reinforcement Learning}
 \subsection{Basic Concepts}
 -Definition of agent, environment, policy, and reward
 -Concept of time discounting, and why we don't care about it
 -Action space of poker
-(\cite{SpinningUp2018})
 
 \subsection{Q-Learning}
--Definition of Q-function
--Why discrete action space is forced, and how we discretized our behavior
--Bellman equation, why we both use and ignore it
--variants we used in our engine
 
 \subsection{Soft Actor-Critic}
-\cite{SAC_main}
--Basic ideas behind SAC:
-    -policy network + value network
-    -train value network on outcomes, train policy network on value network
-    -policy outputs a gaussian distribution, is rewarded for a wide spread
-    -this encourages exploration where it doesn't massively reduce value
--Why: it's the latest in DeepRL
--Parameters
 
-\section{Skill Metrics}
--TrueSkill (\cite{TrueSkill_original}, \cite{TrueSkill_blog})
--percentile scores
--total earnings
--performance against player subset
-    -baselines
-    -highly skilled players only
 
-\section{Poker Engine}
--Requirements from competition
--Need for a fast engine that allowed batching
-    -hence, own engine
--pypokerengine too slow
--Treys (\cite{Treys})
-\section{Strategy Analysis}
--Aggression and Tightness (\cite{PokerStrategy})
--Strategy vector computation
-    -lack of interpretability when plotted raw
+\section{TrueSkill}
+
+
+\section{Optional: Multidimensional Scaling}

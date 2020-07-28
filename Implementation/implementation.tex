@@ -1,0 +1,55 @@
+\chapter{Implementation}
+
+\section{Divisions}
+
+
+\section{Performance Metrics}
+
+\subsection{Earnings}
+
+\subsection{TrueSkill}
+
+\subsection{Best/Worst n Matchups}
+
+
+\section{Strategy Analysis}
+
+\subsection{Cashflow}
+
+\subsection{Strategy Vector}
+
+\subsection{Aggression and Tightness}
+(\cite{PokerStrategy})
+
+
+\section{Agents}
+
+\subsection{Baselines}
+
+
+
+\subsection{Q-Learning}
+-Definition of Q-function
+-Why discrete action space is forced, and how we discretized our behavior
+-Bellman equation, why we both use and ignore it
+-variants we used in our engine
+(\cite{SpinningUp2018})
+
+\subsection{Soft Actor-Critic}
+\cite{SAC_main}
+-Basic ideas behind SAC:
+    -policy network + value network
+    -train value network on outcomes, train policy network on value network
+    -policy outputs a gaussian distribution, is rewarded for a wide spread
+    -this encourages exploration where it doesn't massively reduce value
+-Why: it's the latest in DeepRL
+-Parameters
+(\cite{SpinningUp2018})
+
+
+\section{Vectorized Poker Engine}
+-Requirements from competition
+-Need for a fast engine that allowed batching
+    -hence, own engine
+-pypokerengine too slow
+-Treys (\cite{Treys})
