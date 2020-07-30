@@ -155,7 +155,8 @@
 %\RequirePackage{times}
 
 % Compress multiple citations
-\RequirePackage{natbib}
+%\RequirePackage{natbib}
+\usepackage[style=ieee]{biblatex}
 
 % This package allows the ability to create a 'code' environment.
 \RequirePackage{verbatim}
@@ -1323,13 +1324,13 @@
 
 %% ---- BIBLIOGRAPHY ---------------------------------------------------
 % Save the original bibliography command.
-\let\@tex@bibliography\bibliography
+\let\@tex@printbibliography\printbibliography
 
 % Change the bibliography header.
 \renewcommand*{\bibname}{\centerline{\large BIBLIOGRAPHY}}
 
 % Create a new command for the bibliography.
-\renewcommand*{\bibliography}[1]{ %
+\renewcommand*{\printbibliography}{ %
  % Update the page format.
  \if@umich@report %
   % Eliminate vertical space.
@@ -1345,7 +1346,7 @@
  % Add to table of contents.
  \addcontentsline{toc}{chapter}{Bibliography} %
  % Load the bibliography.
- \@tex@bibliography{#1} %
+ \@tex@printbibliography %
 }
 
 
