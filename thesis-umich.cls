@@ -152,7 +152,7 @@
 \RequirePackage{subcaption}
 
 % This changes the font.
-\RequirePackage{times}
+%\RequirePackage{times}
 
 % Compress multiple citations
 \RequirePackage{natbib}

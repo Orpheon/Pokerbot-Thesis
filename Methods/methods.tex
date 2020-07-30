@@ -9,11 +9,47 @@
 
 \section{Reinforcement Learning}
 \subsection{Basic Concepts}
--Definition of agent, environment, policy, and reward
--Concept of time discounting, and why we don't care about it
--Action space of poker
+Reinforcement learning is a subfield of machine learning where an agent optimizes its actions in a sequential task to maximize some reward signal. It does not usually require a dataset nor labels, but instead an explorable simulation.
+
+An \textit{agent} is a black-box system which receives \textit{observations} of the current state, usually in the form of a numeric vector, processes this according to an internal \textit{policy} (which can have many representations) and outputs selected \textit{actions}, also as a numeric vector.
+
+In a discrete environment, these actions along with external influences lead to a new state. A sequence of states is called a \textit{trajectory}. Some states are associated with a \textit{reward}, a real value that represents how desirable it is for the agent to be in that state. The agent seeks to maximize overall reward.
+
+Tasks are divided into \textit{episodic} and \textit{continuous} tasks. \todo{Cite the Sutton RL book here} An episodic task is a finite task with a well-defined end, for example playing a chess game. Rewards of episodic tasks are often only known at the end of a single \textit{episode}, and an agent iterates through many such episodes to map out the state space. In contrast, a continuous task may run forever, and rewards will trickle in over time. \todo{think about mentioning a problem can be both episodic and continuous, eg. pole}
+
+An concept often used in continuous tasks is \textit{time discounting}, where rewards in the far future are considered less important than rewards in the near future. Formally, let $r(s)$ denote the reward of particular state $s$, $t$ denote a particular time-step, $S$ a trajectory of states from time-steps $t_0$ to $t_{end}$, and $\gamma$ the time discount factor with $0 \leq \gamma \leq 1$. Then the total return $R(S)$ can be defined as
+\begin{equation}
+    R(S) = \sum_{t=t_0}^{t_{end}}{r\big(S(t)\big)\gamma^{t-t_0}}
+\end{equation}
+which the agent tries to maximize.
 
 \subsection{Q-Learning}
+A policy describes some mapping of states to actions, and captures the "strategy" of an agent. It is useful to define a \textit{value function} $V_{\pi}(s)$ of a state and policy that describes the total reward from following that policy starting from that state\footnote{Some authors define the value function as the total reward from following the \textit{optimal} policy, and do not condition it on $\pi$. We keep it general here to reuse the same equations when looking at approximations of the optimal policy.}.
+
+Denoting the action recommended by policy $\pi$ given state $s$ by $\pi(s)$, and the resulting next state by $Env\big(s, \pi(s)\big)$, we can define a recursive equation the value function must satisfy:
+\begin{equation}
+\label{bellman_value}
+    V_{\pi}(s) = r(s) + \gamma V_{\pi} \Big(Env\big(s, \pi(s)\big)\Big)
+\end{equation}
+
+(\ref{bellman_value}) and its variants is known as the Bellman Equation\todo{cite bellman}. Intuitively speaking, it states that the total reward following a policy from a specific state is the reward of that state, plus the discounted total reward from the next state after having acted. One can define a very similar equation in probabilistic terms if the next state after action isn't fixed.
+
+This allows us to construct the Q-function of a state $s$ and action $a$, conditioned on policy $\pi$:
+\begin{equation}
+    Q_{\pi}(s, a) = r(s) + \gamma V_{\pi}\big(Env(s, a)\big)
+\end{equation}
+It follows that
+\begin{equation}
+    Q_{\pi}(s, a) = r(s) + \gamma Q_{pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big)
+\end{equation}
+
+We define $V^*(s)$ and $Q^*(s, a)$, respectively, as the value and Q-functions of the optimal policy.
+
+The core concept behind Q-Learning is to construct a policy using a function approximator (for example, a neural network), training this approximator as a supervised learning problem to satisfy the Bellman equation, and always select the action with the highest predicted reward.
+Over time, the policy will converge to $Q^*(s, a)$\cite{Qlearn_convergence}.
+
+\todo{cite minh 2013}
+
 
 \subsection{Soft Actor-Critic}
 
