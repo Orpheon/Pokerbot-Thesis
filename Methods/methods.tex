@@ -40,6 +40,7 @@ This allows us to construct the Q-function of a state $s$ and action $a$, condit
 \end{equation}
 It follows that
 \begin{equation}
+\label{bellman_q}
     Q_{\pi}(s, a) = r(s) + \gamma Q_{pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big)
 \end{equation}
 
@@ -47,6 +48,26 @@ We define $V^*(s)$ and $Q^*(s, a)$, respectively, as the value and Q-functions o
 
 The core concept behind Q-Learning is to construct a policy using a function approximator (for example, a neural network), training this approximator as a supervised learning problem to satisfy the Bellman equation, and always select the action with the highest predicted reward.
 Over time, the policy will converge to $Q^*(s, a)$ \cite{Qlearn_convergence}.
+
+To train an approximator based on itself recursively is highly unstable, and so it is common to use a frozen copy of the Q-function on the right-hand side of the equation which is updated less frequently. Alternatively, a copy of the Q-function is used that is updated with smoothing applied, for instance through polyak averaging ($0 \leq \alpha \leq 1$):
+\begin{equation}
+    Q_{\pi}^{copy} = \alpha * Q_{\pi} + (1 - \alpha) * Q_{\pi}^{copy}
+\end{equation}
+
+Though (\ref{bellman_q}) is the general equation for Q-Learning, one can simplify it by introducing certain restrictions. In particular, in episodic tasks like poker, rewards can be set to 0 for all non-terminal states, and time-discounting becomes no longer reasonable unless one wishes to punish longer games, so $\gamma$ is set to 1. Let $Term_{\pi}(s, a)$ indicate the terminal state of following policy $\pi$ starting from $Env(s, a)$:
+\begin{equation}
+\begin{split}
+Q_{\pi}(s, a) &= r(s) + \gamma Q_{\pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big)\\
+&= \begin{cases}
+r(s) &\mbox{if s is terminal} \\
+Q_{\pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big) &\mbox{otherwise}
+\end{cases}\\
+&= r\big(Term(s, a)\big)
+\end{split}
+\end{equation}
+which is no longer recursive, and a simple supervised learning objective.
+
+A significant limitation of Q-Learning in practice is that the Q-function must be evaluated on each action to compare expected return. This scales very badly performance-wise to large action spaces, and cannot be applied without modification on continuous action spaces.
 
 \todo{cite minh 2013}
 
