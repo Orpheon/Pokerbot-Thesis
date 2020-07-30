@@ -65,7 +65,7 @@ Q_{\pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big) &\mbox{otherwise}
 &= r\big(Term(s, a)\big)
 \end{split}
 \end{equation}
-which is no longer recursive, and a simple supervised learning objective.
+which is no longer recursive, and thus easier to train.
 
 A significant limitation of Q-Learning in practice is that the Q-function must be evaluated on each action to compare expected return. This scales very badly performance-wise to large action spaces, and cannot be applied without modification on continuous action spaces.
 
@@ -76,6 +76,9 @@ A significant limitation of Q-Learning in practice is that the Q-function must b
 
 
 \section{TrueSkill}
+
+
+
 
 
 \section{Multidimensional Scaling}
