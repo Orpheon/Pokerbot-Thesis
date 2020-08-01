@@ -14,12 +14,23 @@
 
 \section{Strategy Analysis}
 
+We used several metrics to try to figure out how different agents behaved, and how they differed in their behavior. Some of these were primarily for debugging, others for insight-generation.
+
 \subsection{Cashflow}
+
+Some agents play slightly worse than others in all situations. Others might usually win, but lose very hard against certain exploiters. Yet others would prefer to "avoid losing", and make small gains but never really exploit others.
+
+To distinguish which agents were exploiting which how much, we attempted to measure cashflow, how much money was each agent giving over to each agent on average.
+
+\todo{IMAGE: insert example cashflow}
+
+Cashflow was computed individually per round, though conceptually it would not be impossible to compute it on average throughout. However, it is very sensitive to the team composition, which changes with every round, so we found it a better tool to use for specific rounds.
 
 \subsection{Strategy Vector}
 
 \subsection{Aggression and Tightness}
 (\cite{PokerStrategy})
+
 
 
 \section{Agents}
