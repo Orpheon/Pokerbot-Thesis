@@ -70,8 +70,7 @@ Tightness is defined by how many hands a player folds. It is defined simply as:
 \end{equation}
 We decided to ignore checks, as most of our agents have a built-in behavior where they always check if they can and called or folded. This makes the number of checks mostly dependent on the situation numbers, and not on the agent behavior.
 
-
-
+Both metrics were computed based off of the precomputed strategy vectors, as this both gave a consistent set of situations between agents (unlike game logs), and sufficient information to rapidly compute them.
 \section{Agents}
 
 \subsection{Baselines}
