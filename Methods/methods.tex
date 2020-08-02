@@ -78,6 +78,26 @@ A significant limitation of Q-Learning in practice is that the Q-function must b
 
 \subsection{Soft Actor-Critic}
 
+Soft Actor-Critic is a recent evolution of several deep reinforcement learning algorithms building off of Q-Learning. It can handle both discrete and continuous action spaces, it handles the exploration/exploitation tradeoff in a principalled way, and it boasts more stable convergence properties than many of its competitors \cite{SAC_main}.
+
+Like Q-Learning, SAC trains a Q-function that attempts to predict the value of an action given a state and policy. Unlike Q-Learning, it also trains a policy network, that given a state outputs an action, and is trained to maximize the current Q-function. This removes the scaling issues that plagued Q-Learning, and allows continuous action spaces.
+
+This bootstrapping of two neural networks on each other is often unstable, so SAC uses a few tricks to stabilize it. Two separate Q-functions are trained, each to their own polyak-averaged target as in Q-Learning. When the policy function is trained, both are evaluated, and the minimum is taken as optimization target. This helps prevent spurious optimism in the Q-functions completely misleading the policy network.
+
+To understand SAC's approach to exploration, it is helpful to introduce the concept of policy entropy. The entropy of a policy is a measure of how difficult it is to predict what action will be taken under a specific policy given the state. A deterministic policy that always returns the same action given the same state has entropy zero. The entropy of a stochastic policy in a specific state can be calculated by:
+\begin{equation}
+    H\big(\pi(s)\big) = \sum_{a \in \pi(s)}{-P_{\pi, s}(a) log\big(P_{\pi, s}(a)\big)}
+\end{equation} where $P_{\pi, s}(a)$ is the probability of choosing action $a$ under policy $\pi$ in state $s$. This can be understood as "The entropy of policy $\pi$ in state $s$ is the sum of $-log\big(P_{\pi, s}(a)\big)$ for every possible action, weighed by the probability of $\pi$ selecting that action".
+
+SAC implements so-called entropy regularization. Not only does it attempt to maximize long-term reward, but it also attempts to maximize long-term entropy, as high entropy means very random action selection and thus a high amount of exploration. It does this by adding an entropy bonus to the update equations for both the Q-functions and the policy function, and by making the policy function return a distribution to sample from, not simply a value.
+
+To train the Q-functions, the Bellman equation (\ref{bellman_q}) is used, with the added entropy bonus:
+\begin{equation}
+    Q_{\pi}(s, a) = r(s) + \gamma \bigg(Q_{pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big) + \alpha H\big(\pi(s)\big)\bigg)
+\end{equation}
+$\alpha$ is called the temperature, and is a parameter to control the exploration-exploitation tradeoff, as it regulates how strongly weighed the entropy bonus should be. It can be integrated into the reward scaling, if one prefers that.
+
+The policy function does not return an arbitrary distribution, for simplicity the neural network usually returns a normal distribution, by outputting the mean and the standard deviation. To squash this in a finite range given by the action space limits, the normal distribution is squashed by a $tanh(x)$ function, leading to the overall policy distribution being a squashed normal distribution. This restriction allows computing the entropy in closed form as a function of the given standard deviation \cite[explained in detail in the code comments of the SpinningUp SAC implementation]{SpinningUp2018}, so the entropy bonus can be returned by the model alongside the sampled action.
 
 \section{TrueSkill}
 

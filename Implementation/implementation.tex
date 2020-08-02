@@ -74,25 +74,21 @@ Both metrics were computed based off of the precomputed strategy vectors, as thi
 \section{Agents}
 
 \subsection{Baselines}
+We used 2 kinds of non-learning agents during training, to give an initial population to train against.
 
+The first was a random agent, who played randomly. Originally we tuned the likelihood of various actions to not have very short games most of the time, but as the poker competition used flat $\frac{1}{3}$ chance of each action, we did the same so our bots would adapt to the same baselines. It simply chooses from {fold, call/check, raise/bet} with equal probability, and in the case of a raise or bet chooses the amount randomly from what it still has available.
 
+The other frequently used baseline was a call agent, that did nothing but call every hand in every situation.
 
 \subsection{Q-Learning}
--Definition of Q-function
--Why discrete action space is forced, and how we discretized our behavior
--Bellman equation, why we both use and ignore it
--variants we used in our engine
+-give the actual update equations
+-action spaces
 (\cite{SpinningUp2018})
 
 \subsection{Soft Actor-Critic}
 \cite{SAC_main}
--Basic ideas behind SAC:
-    -policy network + value network
-    -train value network on outcomes, train policy network on value network
-    -policy outputs a gaussian distribution, is rewarded for a wide spread
-    -this encourages exploration where it doesn't massively reduce value
--Why: it's the latest in DeepRL
--Parameters
+-give the actual update equations
+-parameters
 (\cite{SpinningUp2018})
 
 
