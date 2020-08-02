@@ -8,6 +8,7 @@
 \subsection{Basic Strategy}
 
 \section{Reinforcement Learning}
+\label{ReinforcementLearningChapter}
 \subsection{Basic Concepts}
 Reinforcement learning is a subfield of machine learning where an agent optimizes its actions in a sequential task to maximize some reward signal. It does not usually require a dataset nor labels, but instead an explorable simulation.
 
@@ -95,7 +96,7 @@ To train the Q-functions, the Bellman equation (\ref{bellman_q}) is used, with t
 \begin{equation}
     Q_{\pi}(s, a) = r(s) + \gamma \bigg(Q_{pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big) + \alpha H\big(\pi(s)\big)\bigg)
 \end{equation}
-$\alpha$ is called the temperature, and is a parameter to control the exploration-exploitation tradeoff, as it regulates how strongly weighed the entropy bonus should be. It can be integrated into the reward scaling, if one prefers that.
+$\alpha$ is called the temperature, and is a parameter to control the exploration-exploitation tradeoff, as it regulates how strongly weighed the entropy bonus should be.
 
 The policy function does not return an arbitrary distribution, for simplicity the neural network usually returns a normal distribution, by outputting the mean and the standard deviation. To squash this in a finite range given by the action space limits, the normal distribution is squashed by a $tanh(x)$ function, leading to the overall policy distribution being a squashed normal distribution. This restriction allows computing the entropy in closed form as a function of the given standard deviation \cite[explained in detail in the code comments of the SpinningUp SAC implementation]{SpinningUp2018}, so the entropy bonus can be returned by the model alongside the sampled action.
 
@@ -113,6 +114,4 @@ When players match up against each other, in any configuration, TrueSkill perfor
 
 For judging victories, TrueSkill only takes the player ranking during a match into account, whether they won first place, won second place, and so on. It does not take into account how hard they won, a narrow victory is equivalent to a one-sided one, and the skill rankings only reflect how \textit{likely} it is for a player to beat another, not by how much.
 
-This has important consequences regarding poker, as a bad player may easily occasionally win against a better player, and these occasional victories would have great impact on the ratings due to it being an upset. To remedy this, one can group hands into a round of several thousand hands, tally the total winnings of the round, and consider the full round a single match for the purposes of TrueSkill. The larger the round, the lower the probability that a bad player beats a good player out of luck, and thus the less instable TrueSkill becomes.
-
-\section{Multidimensional Scaling}
+This has important consequences regarding poker, as a bad player may easily occasionally win against a better player, and these occasional victories would have great impact on the ratings due to it being an upset. To remedy this, one can group hands into a round of several thousand hands, tally the total winnings of the round, and consider the full round a single match for the purposes of TrueSkill. The larger the round, the lower the probability that a bad player beats a good player out of luck, and thus the less unstable TrueSkill becomes.
