@@ -834,7 +834,7 @@
 \newcommand{\showlistofappendices}{\@umich@listofappendicestrue}
 \newcommand{\showlistofabbreviations}{\@umich@listofabbrevstrue}
 \newcommand{\showlistofacronyms}{\@umich@listofacronymstrue}
-\newcommand{\showlistofsymbos}{\@umich@listofsymbolstrue}
+\newcommand{\showlistofsymbols}{\@umich@listofsymbolstrue}
 
 % Commands to hide each of the lists
 \newcommand{\hidelistoffigures}{\@umich@listoffiguresfalse}
@@ -845,7 +845,7 @@
 \newcommand{\hidelistofappendices}{\@umich@listofappendicesfalse}
 \newcommand{\hidelistofabbreviations}{\@umich@listofabbrevsfalse}
 \newcommand{\hidelistofacronyms}{\@umich@listofacronymsfalse}
-\newcommand{\hidelistofsymbos}{\@umich@listofsymbolsfalse}
+\newcommand{\hidelistofsymbols}{\@umich@listofsymbolsfalse}
 
 
 %% ---- TENTS ----------------------------------------------
@@ -1239,9 +1239,7 @@
  \vspace{1ex} %
  % Start the automatic symbols feature.
  \begin{singlespace} %
-  \begin{acronym} %
-   \@symbols %
-  \end{acronym} %
+  \input{symbols}
  \end{singlespace} %
 }
 
@@ -1472,24 +1470,6 @@
  \if@umich@prologue\prologuepage\fi %
  % Insert the table of contents.
  \tableofcontents %
- % Insert the list of figures.
- \if@umich@listoffigures\listoffigures\fi %
- % Insert the list of tables.
- \if@umich@listoftables\listoftables\fi %
- % Insert the list of maps.
- \if@umich@listofmaps\listofmaps\fi %
- % Insert the list of illustrations.
- \if@umich@listofillustrations\listofillustrations\fi %
- % Insert the list of programs.
- \if@umich@listofprograms\listofprograms\fi %
- % Insert the list of appendices.
- \if@umich@listofappendices\listofappendices\fi %
- % Insert the list of abbreviations.
- \if@umich@listofabbrevs\listofabbreviations\fi %
- % Insert the list of acronyms.
- \if@umich@listofacronyms\listofacronyms\fi %
- % Insert the list of symbols.
- \if@umich@listofsymbols\listofsymbols\fi %
  % Insert the abstract.
  \if@umich@abstract\abstractpage\fi %
  % Move to next page.
@@ -1513,3 +1493,25 @@
  \fi %
 }
 
+% Commands to be placed before \end{document}
+\AtEndDocument{ %
+ % Insert the list of figures.
+ \if@umich@listoffigures\listoffigures\fi %
+ % Insert the list of tables.
+ \if@umich@listoftables\listoftables\fi %
+ % Insert the list of maps.
+ \if@umich@listofmaps\listofmaps\fi %
+ % Insert the list of illustrations.
+ \if@umich@listofillustrations\listofillustrations\fi %
+ % Insert the list of programs.
+ \if@umich@listofprograms\listofprograms\fi %
+ % Insert the list of appendices.
+ \if@umich@listofappendices\listofappendices\fi %
+ % Insert the list of abbreviations.
+ \if@umich@listofabbrevs\listofabbreviations\fi %
+ % Insert the list of acronyms.
+ \if@umich@listofacronyms\listofacronyms\fi %
+ % Insert the list of symbols.
+ \listofsymbols %
+ \printbibliography
+}

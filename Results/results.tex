@@ -1,21 +1,23 @@
 \chapter{Results}
-This chapter discusses the results of the final run of the training and evaluation. For the training five divisions to train agents and three \todo{verify if correct} PermaEval divisions were used. All training divisions included one random agent and one call agent as baselines for training. Four different types of agents were used: Qlearn-8 , Qlearn-All, sac-Low, and sac-High. Following is the division setup used for the final run.
+This chapter discusses the results of the final run of the training and evaluation. In the final run, five divisions to train agents and three \todo{verify if correct} PermaEval divisions were used. All training divisions included one random agent and one call agent as baselines for training. Four different types of agents were used: Qlearn-8 , Qlearn-All, sac-Low, and sac-High. Following is the division setup used for the final run.
 \begin{itemize}
     \item 1. Climbing division with baselines + Qlearn-8
     \item 2. Climbing division with baselines + Qlearn-All
     \item 3. Climbing division with baselines + sac-Low
     \item 4. Climbing division with baselines + sac-High
     \item 5. Climbing division with baselines + Qlearn-8 + Qlearn-All + sac-Low + sac-High
-    \item 6. Random division with Qlearn-All
-    \item 7. PermEvalSimilar division with trueskill
+    \item 6. Random division with baselines + Qlearn-All
+    \item 7. PermEvalSimilar division with trueskill leaderboard
     \item 8. exactly the same as number 7, to verify if trueskill converges to the same result
-    \item 9. PermEvalDirect division with winnings
+    \item 9. PermEvalDirect division with winnings leaderboard
 \end{itemize}
 The agents are trained over 2'000 rounds, which means that each agent inside the mixed division only plays an average of 500 rounds. The cloning was set to every 200 rounds, which generated a total of 90 agents over the whole run.
+The training was run on a computer with an Intel 6770k CPU, 16GB Ram, and an Nvidia 1070GTX GPU with 8GB VRAM. The training process of the final evaluation took around 44h runtime. All the rest of this chapter is based on the agents created during this final run.
 
+\todo{agents sort cards, note this somewhere}
 
 \section{Performance Metrics}
-
+After generating all agents, the three PermaEval divisions were run to evaluate the best agent for the competition. Because the agents have not been trained against agents from other divisions, this is was also a test of how well agents responded to unknown opponents. The following Subsections go further in depth on how well the two metrics (trueskill and winnings) performed on these agents.
 
 \subsection{TrueSkill}
 - results overview, what is the output
