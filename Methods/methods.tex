@@ -1,12 +1,5 @@
 \chapter{Theoretical Methods}
 
-
-\section{Poker}
-
-\subsection{Competition Rules}
-
-\subsection{Basic Strategy}
-
 \section{Reinforcement Learning}
 \label{ReinforcementLearningChapter}
 \subsection{Basic Concepts}
@@ -19,6 +12,7 @@ In a discrete environment, these actions along with external influences lead to 
 Tasks are divided into \textit{episodic} and \textit{continuous} tasks \cite[Chapters 3.3 \& 3.4]{Sutton}. An episodic task is a finite task with a well-defined end, for example playing a chess game. Rewards of episodic tasks are often only known at the end of a single \textit{episode}, and an agent iterates through many such episodes to map out the state space. In contrast, a continuous task may run forever, and rewards will trickle in over time. \todo{think about mentioning a problem can be both episodic and continuous, eg. pole}
 
 An concept often used in continuous tasks is \textit{time discounting}, where rewards in the far future are considered less important than rewards in the near future. Formally, let $r(s)$ denote the reward of particular state $s$, $t$ denote a particular time-step, $S$ a trajectory of states from time-steps $t_0$ to $t_{end}$, and $\gamma$ the time discount factor with $0 \leq \gamma \leq 1$. Then the total return $R(S)$ can be defined as
+\todo{Remove $*$ as multiplication symbol}
 \begin{equation}
     R(S) = \sum_{t=t_0}^{t_{end}}{r\big(S(t)\big)\gamma^{t-t_0}}
 \end{equation}
@@ -53,12 +47,14 @@ The core concept behind Q-Learning is to construct a policy using a function app
 Over time, the policy will converge to $Q^*(s, a)$ \cite{Qlearn_convergence}.
 
 To train an approximator based on itself recursively is highly unstable, and so it is common to use a frozen copy of the Q-function on the right-hand side of the equation which is updated less frequently. Alternatively, a copy of the Q-function is used that is updated with smoothing applied, for instance through polyak averaging ($0 \leq \alpha \leq 1$):
+\todo{go through all the equations and replace assignment with $\leftarrow$}
 \begin{equation}
     Q_{\pi}^{copy} = \alpha * Q_{\pi} + (1 - \alpha) * Q_{\pi}^{copy}
 \end{equation}
 
 Though (\ref{bellman_q}) is the general equation for Q-Learning, one can simplify it by introducing certain restrictions. In particular, in episodic tasks like poker, rewards can be set to 0 for all non-terminal states, and time-discounting becomes no longer reasonable unless one wishes to punish longer games, so $\gamma$ is set to 1. Let $Term_{\pi}(s, a)$ indicate the terminal state of following policy $\pi$ starting from $Env(s, a)$:
 \begin{equation}
+\label{Qlearn_nobellman}
 \begin{split}
 Q_{\pi}(s, a) &= r(s) + \gamma Q_{\pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big)\\
 &= \begin{cases}
@@ -70,16 +66,16 @@ Q_{\pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big) &\mbox{otherwise}
 \end{equation}
 which is no longer recursive, and thus easier to train.
 
-Q-Learning, as presented so far, is maximally exploitative; it never acts in what it believes might be suboptimal paths to explore what they are actually like. In isolation, this means that Q-Learning is highly susceptible to honing immediately on a suboptimal policy and never improving. To remedy this, it is useful to add a certain level of noise to the actions, such that an agent selects a random agent with probability $\epsilon$ \cite[Chapters 2.2 \& 2.3]{Sutton}. The size of $\epsilon$ controls the exploration-exploitation tradeoff for Q-Learning, and of course $\epsilon$ is usually set to 0 in finished/non-training agents.
+Q-Learning, as presented so far, is maximally exploitative; it never acts in what it believes might be suboptimal paths to explore what they are actually like. In isolation, this means that Q-Learning is highly susceptible to honing immediately on a suboptimal policy and never improving. To remedy this, it is useful to add a certain level of noise to the actions, such that an agent selects a random action with probability $\epsilon$ \cite[Chapters 2.2 \& 2.3]{Sutton}. The size of $\epsilon$ controls the exploration-exploitation trade-off for Q-Learning, and of course $\epsilon$ is usually set to 0 in finished/non-training agents.
 
 A significant limitation of Q-Learning in practice is that the Q-function must be evaluated on each action to compare expected return. This scales very badly performance-wise to large action spaces, and cannot be applied without modification on continuous action spaces.
 
-\todo{cite minh 2013}
+\todo{cite minh 2013 somewhere}
 
 
 \subsection{Soft Actor-Critic}
 
-Soft Actor-Critic is a recent evolution of several deep reinforcement learning algorithms building off of Q-Learning. It can handle both discrete and continuous action spaces, it handles the exploration/exploitation tradeoff in a principalled way, and it boasts more stable convergence properties than many of its competitors \cite{SAC_main}.
+Soft Actor-Critic is a recent evolution of several deep reinforcement learning algorithms building off of Q-Learning. It can handle both discrete and continuous action spaces, it handles the exploration/exploitation trade-off in a principled way, and it boasts more stable convergence properties than many of its competitors \cite{SAC_main}.
 
 Like Q-Learning, SAC trains a Q-function that attempts to predict the value of an action given a state and policy. Unlike Q-Learning, it also trains a policy network, that given a state outputs an action, and is trained to maximize the current Q-function. This removes the scaling issues that plagued Q-Learning, and allows continuous action spaces.
 
@@ -96,7 +92,7 @@ To train the Q-functions, the Bellman equation (\ref{bellman_q}) is used, with t
 \begin{equation}
     Q_{\pi}(s, a) = r(s) + \gamma \bigg(Q_{pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big) + \alpha H\big(\pi(s)\big)\bigg)
 \end{equation}
-$\alpha$ is called the temperature, and is a parameter to control the exploration-exploitation tradeoff, as it regulates how strongly weighed the entropy bonus should be.
+$\alpha$ is called the temperature, and is a parameter to control the exploration-exploitation trade-off, as it regulates how strongly weighed the entropy bonus should be.
 
 The policy function does not return an arbitrary distribution, for simplicity the neural network usually returns a normal distribution, by outputting the mean and the standard deviation. To squash this in a finite range given by the action space limits, the normal distribution is squashed by a $tanh(x)$ function, leading to the overall policy distribution being a squashed normal distribution. This restriction allows computing the entropy in closed form as a function of the given standard deviation \cite[explained in detail in the code comments of the SpinningUp SAC implementation]{SpinningUp2018}, so the entropy bonus can be returned by the model alongside the sampled action.
 

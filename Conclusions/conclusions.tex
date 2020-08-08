@@ -1,1 +1,20 @@
 \chapter{Conclusions}
+
+\section{Populations}
+Against our initial expectation, we find that different populations do not lead to visible differences in strategy coverage, and matter far less than agent structure \todo{reference relevant section in results}.
+
+We also find that matchup generation
+    population doesn't matter nearly as much as agent structure
+      a bit, though
+    random vs climbing not very relevant for training
+
+\section{Metrics}
+While TrueSkill works, and given a library is very simple to implement, it is less insightful than other metrics. It does not show whether an agent is robust or good only in certain matchups, so the ranking is difficult to interpret. Additionally, the matchmaking chosen has a very big influence on the rankings. This lead us to prefer using winnings to decide whether an agent is suited for the competition, as it allows us to compare robustness and average performance.
+\todo{if TrueSkill doesn't converge, give a comment here}
+
+Comparison against baselines does not, as expected, correlate almost at all with performance against other agents.
+
+\section{Agents}
+SAC agents do not perform very well, despite significant effort and experimentation in the early stages of this project. It is possible this is because applying a continuous action space algorithm on poker was fundamentally a wrong approach, or because the entropy bonus was not handled correctly.
+
+An interesting observation is that the action space of the Q-Learning agents influences their behavior heavily, with the qAll agents playing very aggressively. One explanation for this is how exploration is handled; every action has a $\epsilon = 10\%$ chance of being replaced with a randomly selected non-folding action from the action space. The action space for qAll is composed of one call action and 200 raise actions, whereas qln5 uses one call action and only 7 raise actions. This means that qAll explores aggressive actions far more than qln5, and also more than other agents like SAC. A further experiment would be to weigh this exploration likelihood by action type, such that calling is explored as much as raising in total.

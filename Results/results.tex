@@ -1,6 +1,30 @@
 \chapter{Results}
+This chapter discusses the results of the final run of the training and evaluation. For the training five divisions to train agents and three \todo{verify if correct} PermaEval divisions were used. All training divisions included one random agent and one call agent as baselines for training. Four different types of agents were used: Qlearn-8 , Qlearn-All, sac-Low, and sac-High. Following is the division setup used for the final run.
+\begin{itemize}
+    \item 1. Climbing division with baselines + Qlearn-8
+    \item 2. Climbing division with baselines + Qlearn-All
+    \item 3. Climbing division with baselines + sac-Low
+    \item 4. Climbing division with baselines + sac-High
+    \item 5. Climbing division with baselines + Qlearn-8 + Qlearn-All + sac-Low + sac-High
+    \item 6. Random division with Qlearn-All
+    \item 7. PermEvalSimilar division with trueskill
+    \item 8. exactly the same as number 7, to verify if trueskill converges to the same result
+    \item 9. PermEvalDirect division with winnings
+\end{itemize}
+The agents are trained over 2'000 rounds, which means that each agent inside the mixed division only plays an average of 500 rounds. The cloning was set to every 200 rounds, which generated a total of 90 agents over the whole run.
+
 
 \section{Performance Metrics}
+
+
+\subsection{TrueSkill}
+- results overview, what is the output
+- does it converge?
+- reproducibility
+- does matchup matter?
+- weird behavior
+- internal vs overall correlation
+
 
 \subsection{Winnings}
 - result overview, what is the output
@@ -18,28 +42,12 @@
 - exploiters -> ? where expected winner lost with highest negative
 
 
-\subsection{TrueSkill}
-- results overview, what is the output
-- does it converge?
-- reproducibility
-- does matchup matter?
-- weird behavior
-- internal vs overall correlation
-
 \section{Agents}
-
-\subsection{Baselines}
-
 -how do the various architectures do in training
     -convergence speed
     -skill cap
     -dependence on features
     -consistency
-
-\subsection{Q-Learning}
-
-\subsection{Soft Actor-Critic}
-
 
 \section{Populations}
 -how do the various population do in training
@@ -48,14 +56,6 @@
     -dependence on features
     -consistency
 
-\subsection{Divergence of Identical Populations}
+\subsection{Divergence of Populations}
 -how convergent are league setups?
     -do different leagues "drift apart" or cover mostly the same strats
-
-\subsection{Exploiters}
--how much can you overfit against particular types of agents?
-    -baselines
-    -other league
-    -particular aggression/tightness quadrant
-
-\subsection{Optimal Populations}

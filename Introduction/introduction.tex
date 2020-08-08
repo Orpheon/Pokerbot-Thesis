@@ -1,18 +1,54 @@
 \chapter{Introduction}
-
+\todo{Add nomenclature https://www.overleaf.com/learn/latex/nomenclatures}
 \section{Poker Competition}
+A poker AI competition between three teams was run during the spring semester of 2020 by the Institute for Data Science of the University of Applied Sciences and Arts Northwestern Switzerland. As one of the three teams our goal was to write a bot in a specified framework, which would be evaluated on a weekly basis against those of the other teams at 6-player No-Limit Texas Hold'em poker. To fill the other 3 player slots, three additional agents were submitted by the supervisors. This dissertation describes our approach, methods, internal evaluations, and insights during this competition.
+
+\section{Poker}
+No-Limit Texas Hold'em Poker is a turn-based game, where each player starts out with a fixed amount of cash they can bet in each round (called a hand in this thesis), and the winner of the hand collects all the bets. The total winnings and loss of each player are summed over n hands, and Whichever player ends up with the highest total wins.
+
+
+\subsection{Positions}
+Before the hands are dealt (the players receive their cards) one player receives the dealer button, this indicates a specific role that influences the betting order. Two other roles are important, namely the small and big blind, because these two players are forced to place an initial bet before the game starts. The positions are as follows:
+\begin{itemize}
+    \item Dealer Button (BTN)
+    \item Small Blind (SB)
+    \item Big Blind (BB)
+    \item Early Position (EP), or also called Under the Gun (UTG) because this player is the first to act during the first phase.
+    \item Middle Position (MP)
+    \item Cut Off (CO)
+\end{itemize}
+
+\subsection{Actions}
+A player can take one of three actions: fold, call or raise.
+Folding means that the player drops out of the round and loses his current investment, is not eligible for winning the pot, cannot take any actions until the next hand, but does not have to reveal his hand.
+Calling is when a player increases his bet to the current highest bet, this is also called a check if no other player has raised during this phase.
+A Raise is when a player increases the current highest bet by raising his bet over the previous highest bet. There is a minimum amount of money that the player has to raise by, to prevent very long games where one player after another raises by a minuscule amount.
+
+\subsection{Phases}
+Each hand is divided into 5 phases. During every phase, all players that have not folded have to either call, raise or fold until either everyone but one player has folded, all remaining players check, or every player after the last raise has either called or folded.
+
+\begin{itemize}
+  \item Preflop (each player receives two cards (hole cards), the EP starts with betting)
+  \item Flop (the first three community cards are revealed, the SB starts with betting)
+  \item Turn (the fourth community card is revealed, the SB starts with betting)
+  \item River (the fifth and last community card is revealed, the SB starts with betting)
+  \item Showdown (this phase starts when either the river phase finishes or when a player goes all-in and not all other players fold, during this phase all players that have not folded yet reveal their cards and the player with the strongest hand receives the pot. If multiple players have equal hand strengths, the pot is divided equally between them.)
+\end{itemize}
+
+
+\todo{remove this?}
 -Competitive game that rewards both risk assessment and opponent modeling
 -Simple and fast to compute
 -6 player holdem does not satisfy Nash requirement {CITE PAPER explaining why this matters, I think it was the Pluribus paper?}
 
-\section{Possible Approaches}
--Lookup tables {Find citation, if possible?}
--MDP {again, citation? The RL introduction book could be cited, if nothing else, but application to poker would be nice}
--DeepRL with counterfactual regret
-    -Libratus: 1v1 (\cite{Libratus})
-    -Pluribus: Same team, holdem (\cite{Pluribus})
+\subsection{Competition Rules}
+For the competition the rules have been specified more in depth, so that every team is able to train their agents for the correct rule set. The python framework used by the agents is called Pypokerengine \todo{pypokerengine reference} and has been modified for the challenge, there is also no guarantee that the games are played in order, because some parts might be parallelized to speed up the evaluation. The SB is set to 1 and the BB to 2, each players starts every hand with 200. Each team can submit their twice per week, which is then directly evaluated against some very simple agents called baselines. This baseline evaluation i run over 10K hands and the team receives the feedback as soon as the evaluation is completed, if the evaluation fails for any reason (software bugs, timeouts, etc.) the evaluation does not count against the number of weekly evaluations and the last successful submission still remains as the current entry. At the end of every week the three agents of the competing teams are pitted against each other and the three agents submitted by the supervisor and evaluated over 100K hands, the results are visible on a leaderboard to which all teams have access.
 
-\section{Our Choice}
--AlphaStar (\cite{AlphaStar})
--{Find citation on metas of competitive esports of different continents being very different}
--Population-based learning, A-Life citation maybe?
+\section{Possible Approaches}
+There are many different approaches to autonomously playing poker, from statistical methods, search tree traversal, player emulation, reinforcement learning, and so on. \todo{find citations for all of these}
+
+We chose to focus on deep reinforcement learning with self-play, because it is a relatively new approach with great results in other games \cite{GamesRL} \cite{OpenAIFive} \cite{Alphago} \cite{AlphaStar}, and it does not require a training set.
+
+Deep reinforcement learning has already found success in 2-player poker \cite{Deepstack} \cite{Libratus}, and even 6-player No-Limit Texas Hold'em \cite{Pluribus}. However, all of these results use hybrid approaches, using neural networks only when the search space becomes too large for traversal. They also all use counterfactual regret minimization, which is rarely used elsewhere, and we wanted to see if other simpler approaches would work as well. \todo{probably reword this sentence, and the following paragraph}
+
+We were inspired by AlphaStar's \cite{AlphaStar} approach to training agents at a complex strategy game by emulating an entire league of players, and letting hundreds of mutations of agents match against each other.
