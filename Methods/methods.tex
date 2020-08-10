@@ -82,7 +82,6 @@ This bootstrapping of two neural networks on each other is often unstable, so SA
 
 To understand SAC's approach to exploration, it is necessary to introduce the concept of policy entropy. The entropy of a policy is a measure of how difficult it is to predict what action it will select given a state. A deterministic policy that always returns the same action given the same state has entropy zero. The entropy of a stochastic policy in a specific state can be calculated by:
 
-\todo{rethink arguments}
 \begin{equation}
     H(\pi, s) \coloneqq \sum_{a \in \pi(s)}{-P_{\pi, s}(a) log\big(P_{\pi, s}(a)\big)}
 \end{equation} where $P_{\pi, s}(a)$ is the probability of policy $\pi$ choosing action $a$ in state $s$. This can be understood as "The entropy of policy $\pi$ in state $s$ is the sum of $-log\big(P_{\pi, s}(a)\big)$ for every possible action, weighed by the probability of $\pi$ selecting that action".
@@ -91,7 +90,7 @@ SAC implements so-called entropy regularization. Not only does it attempt to max
 
 To train the Q-functions, equation (\ref{bellman_q}) is used with the added entropy bonus:
 \begin{equation}
-    Q_{\pi}(s, a) = r(s) + \gamma \bigg(Q_{\pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big) + \alpha H\big(\pi(s)\big)\bigg)
+    Q_{\pi}(s, a) = r(s) + \gamma \bigg(Q_{\pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big) + \alpha H(\pi, s)\bigg)
 \end{equation}
 $\alpha$ is called the temperature and is a parameter to control the exploration-exploitation trade off, as it regulates how strongly weighed the entropy bonus should be.
 
@@ -102,7 +101,7 @@ The policy function does not return an arbitrary distribution. For simplicity, t
 TrueSkill is a skill rating system developed by Microsoft in 2007 that attempts to measure relative skill of players in repeated games \cite{TrueSkill_original} \cite{TrueSkill_blog}.
 
 \todo{reword section}
-It supports flexible team setups by assuming team skill to be the sum of player skill, draws, and more than 2 teams. It also boasts a solid theoretical foundation. This makes it much more suitable for Texas Hold'em (6-player free-for-all) than ELO \cite{Elo} or other common skill ranking systems.
+It supports flexible team setups, draws, and more than 2 teams. It also boasts a solid theoretical foundation. This makes it more suitable for Texas Hold'em (a 6-player free-for-all) than ELO \cite{Elo} or other common skill ranking systems that are designed for two competing teams.
 
 TrueSkill assumes each player has a numeric skill rating. The delta between two players' skill ratings represents the likelihood of one player winning. The scale involved is arbitrary and defined through the choice of a parameter $\beta$, where a player being $\beta$ points above another implies that player has an approximately 76\% chance\footnote{Specifically, $\Phi\left(\frac{1}{\sqrt{2}}\right)$, where $\Phi(x)$ is the cumulative density function of the standard normal distribution.} of winning if matched against each other.
 
@@ -112,4 +111,4 @@ When players match up against each other, TrueSkill performs a bayesian update, 
 
 For judging victories, TrueSkill only takes the player ranking during a match into account, whether they won first place, won second place, and so on. It does not take into account by how much they won, a narrow victory is equivalent to an overwhelming one, and the skill rankings only reflect how likely it is for a player to beat another, not by how much.
 
-This has important consequences regarding poker, as a bad player occasionally wins against a better player \todo{find better formulation} thanks to lucky card, and these occasional victories would have great impact on the ratings due to it being an upset. To remedy this, we group hands into a round of 10'000 hands, tally the total winnings of the round, and consider the full round a single match in TrueSkill. The larger the round, the lower the probability that a bad player beats a good player out of luck, and thus the more stable TrueSkill becomes.
+This has important consequences regarding poker, as a bad player occasionally wins against a better player thanks to lucky cards, and these occasional victories would have great impact on the ratings due to it being an upset. To remedy this, we group hands into a round of 10'000 hands, tally the total winnings of the round, and consider the full round a single match in TrueSkill. The larger the round, the lower the probability that a bad player beats a good player out of luck, and thus the more stable TrueSkill becomes.

@@ -131,7 +131,6 @@ We computed winnings with 10'000 hands per agent pairing of all 102 agents, for 
 \end{table}
 
 \begin{code}
-    -discussion
     -correlation (kendall-tau)
     -sorting by n upsets
 \end{code}
@@ -162,33 +161,27 @@ We computed winnings with 10'000 hands per agent pairing of all 102 agents, for 
 \label{AggTightRank}
 \end{figure}
 
-\begin{code}
-    -discussion
-\end{code}
-
 \subsection{TrueSkill Coherence}
 \begin{figure}[H]
 \centering
 \subcaptionbox{
-    TrueSkill over time in the first PermaEval division
+    First PermaEval division TrueSkill
 }{
-    \includegraphics[width=\linewidth]{Results/figures/placeholder.png}
+    \includegraphics[width=\linewidth]{Results/figures/trueskill1.png}
 }
 \subcaptionbox{
-    TrueSkill over time in the second PermaEval division
+    Second PermaEval division TrueSkill
 }{
-    \includegraphics[width=\linewidth]{Results/figures/placeholder.png}
+    \includegraphics[width=\linewidth]{Results/figures/trueskill2.png}
 }
 \caption{TrueSkill over time in both PermaEval divisions, compared}
 \label{TrueSkillCompare}
 \end{figure}
-\begin{code}
-    - discussion
-\end{code}
+
 \begin{figure}[H]
 \centering
     \includegraphics[width=0.8\linewidth]{Results/figures/trueskill_comparison.png}
-\caption{Agent rank in both TrueSkill PermaEval divisions}
+\caption{Agent rank in both TrueSkill PermaEval divisions, colored by type}
 \label{TrueSkillCompare2}
 \end{figure}
 \begin{code}
@@ -267,31 +260,26 @@ We computed winnings with 10'000 hands per agent pairing of all 102 agents, for 
 \subcaptionbox{
     Ranked by TrueSkill
 }{
-    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+    \includegraphics[width=0.45\linewidth]{Results/figures/generationsTrueSkill.png}
 }
 \subcaptionbox{
     Ranked by Mean
 }{
-    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+    \includegraphics[width=0.45\linewidth]{Results/figures/generationsMean.png}
 }
 \subcaptionbox{
     Ranked by Median
 }{
-    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+    \includegraphics[width=0.45\linewidth]{Results/figures/generationsMedian.png}
 }
 \subcaptionbox{
     Ranked by 20-Percentile
 }{
-    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+    \includegraphics[width=0.45\linewidth]{Results/figures/generations20-Percentile.png}
 }
-\caption{Agent evolution over time by type and rank [LINE GENERATIONPLOT]}
+\caption{Agent evolution over time by type and rank}
 \label{AgentGenerations}
 \end{figure}
-
-\begin{code}
-    - convergence speed
-    - skill cap
-\end{code}
 
 \section{Populations}
 \begin{table}[H]
@@ -300,7 +288,6 @@ We computed winnings with 10'000 hands per agent pairing of all 102 agents, for 
  \hline
  Rank & TrueSkill & Mean & Median & 20-Percentile \\ [0.5ex] 
  \hline\hline
- \todo{wrong table}
    1 &   Qln8-Cl &   QlnA-Cl &   QlnA-Cl &       QlnA-Rn \\
    2 &   Qln8-Cl &   QlnA-Cl &   Qln8-Cl &       QlnA-Cl \\
    3 &   QlnA-Rn &   QlnA-Cl &   Qln8-Cl &       Qln8-Cl \\

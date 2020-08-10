@@ -4,19 +4,17 @@
 We set up a modular training environment to compare different agent populations. The different divisions can be used to observe how agents influence each other, which match up method produces the best results, and allows comparing agents that have not been trained against each other. \todo{fix wording}
 
 \subsection{Agent Manager}
-The agent manager is the \todo{phrasing} single source of truth for all agents, and is responsible for instantiating agents. It tags every agent with a unique id so other components only need to store agent id. This removes redundancy and also makes it easy to change agent information without side effects.
+The agent manager is the single source of truth for all agents, and is responsible for instantiating agents. It tags every agent with a unique id so other components only need to store agent id. This removes redundancy and also makes it easy to change agent information without side effects.
 
-\todo{phrasing?}
 The agent manager keeps all important information about an agent: type, paths to model files, whether the agent is trainable or not, origin division and its name.
 \todo{explain more}
 
 \subsection{Leaderboard}
 A leaderboard ranks agents from best to worst according to one of the metrics. There are several different types of leaderboards using different metrics (e.g. TrueSkill, winnings, etc.). When a match in a division concludes, all leaderboards attached to the division are updated with the results. Further detail on the different metrics in section \ref{PerformanceMetricsSection}.
 
-\todo{matchup or match up}
+\todo{matchup, match-up, or match up?}
 
 \subsection{Divisions}
-\todo{explain what a division is}
 A division is responsible for generating match ups between agents, running games, and updating leaderboards with the results. There are several types of divisions with different match up rules.
 
 Divisions differentiate between two types of agents: teachers and students. A student is trainable, using one of the algorithms discussed in section \ref{ReinforcementLearningChapter} and adapts its behavior during play. A teacher does not change its behavior and is either a baseline with hard-coded behavior or a clone of a student with fixed weights. Divisions usually have their own set of agents and do not influence outside agents. However, there are some exceptions, as will be explained in sections \ref{PermEvalSimilarDiv} and \ref{PermEvaldirectDiv}.
@@ -27,11 +25,10 @@ The random division requires at least one student and one teacher, and keeps a l
 \subsubsection{Climbing Division}
 The climbing division also requires at least one student and one teacher, and keeps a list of its own agents. Unlike the random division, this division requires a TrueSkill-based leaderboard to function. The goal of this division is to match students more frequently against better teachers.
 
-This division selects teachers weighted by their TrueSkill rating. The probability of an agent being selected is:
+This division selects teachers weighted by their TrueSkill rating. Let $\mu_i$ denote the TrueSkill rating of the $i$'th agent, then that agent's probability $p(Selected)$ among the $n$ other agents is:
 \begin{equation}
-  P_i = \frac{{ts_i}^2}{\sum_{j=0}^{n} {ts_j}^2}
+  p(Selected) = \frac{{\mu_i}^2}{\sum_{j=0}^{n} {\mu_j}^2}
 \end{equation}
-\todo{update symbol table}
 This is repeated five times, making it likely that the best agent is chosen multiple times.
 
 This has two problems: first, a new agent is assumed to have an average rating, but is likely one of the best agents. Because of this, the agent might only rarely play and therefore take a long time to converge to its actual TrueSkill rating. Second, with a large number of agents there is an inequality between the number of games played per agent which also causes the TrueSkill rating of rarely appearing agents to be unreliable.
@@ -46,7 +43,7 @@ This division does not have an internal agent list, and uses the agent manager d
 \subsubsection{Permanent Evaluation Direct Division}\label{PermEvaldirectDiv}
 Short "PermaEvalDirect", this division is special, as it compares only two agents against each other. It selects two random agents from the entire pool and creates three instances of each agent. The two agents must be different and the division tracks previously run matchups and prioritizes those that were not run before.
 
-This division is specifically designed to compute the winnings \todo{refere to winning metric} metric.
+This division is specifically designed to compute the winnings metric (section \ref{Winnings}).
 
 \subsection{Division Manager}
 The division manager works similarly to the agent manager in that it handles all divisions with their configurations and tags every division with a unique id. This is used to simplify the running of games, as user can simply add divisions with the desired configuration and agent constellation and then specify which divisions should be run.
@@ -57,23 +54,25 @@ The division manager works similarly to the agent manager in that it handles all
 We did not reimplement TrueSkill, instead using an existing python implementation \cite{TrueSkill_code}. We used a $\beta$ of $\frac{25}{6}$ and a starting distribution $\mathcal{N}(\mu=100, \sigma=30)$ for new agents.
 
 \subsection{Winnings}
+\label{Winnings}
 The winnings metric compares agents in a direct confrontation against each other by matching up both agents with three copies each. For both the average winning is calculated and added to a matrix of all agents.
 
-Seats are randomized to minimize the advantage gained by a better seat. Ideally all seating combinations would be run for an equal number of hands, but this was not implemented because of increased complexity and computational time needed. \todo{add graphic here or only at results?} To improve runtime, matchups that have not been played are first in line for the next evaluation. Because of the quadratic growth of matchups needed this metric is not a good choice for a large number of agents.
+Seats are randomized to minimize the advantage gained by a better seat. Ideally all seating combinations would be run for an equal number of hands, but this was not implemented because of increased complexity and computational time needed.
+
+To improve runtime, matchups that have not been played are first in line for the next evaluation. Because of the quadratic growth of matchups needed this metric is not a good choice for a large number of agents.
 
 To generate a leaderboard from the winnings matrix, the following measures are used:
-\todo{Finish this section}
-- mean of winnings
-- median of winnings, this has the advantage of not being screwed by different performances against very bad agents (e.g. the baseline agents)
-- percentiles (e.g. 10pctl) of winnings, this has the advantage of showing how the agent performs against it's worst match-ups (not to be confused with the best agents) because of possible exploiter agents
-
-\todo{fix numbering}
+\begin{itemize}
+    \item mean of winnings
+    \item median of winnings, which has the advantage of not being distorted by different performance against terrible agents (e.g. baseline agents)
+    \item percentiles (e.g. 20pctl) of winnings, which has the advantage of showing how the agent performs against its worst matchups, giving a measure of robustness
+\end{itemize}
 
 \subsection{Kendall's Tau}
 
 We use Kendall's Tau \cite{KendallTau} in section \ref{Results} as a measure of distance between rankings. This allows us to describe the similarity between rankings of different measures or between different divisions containing the same agents.
 
-\todo{short explanation of what kendall tau actually does}
+\todo{short explanation of what kendall's tau actually does}
 
 We did not implement the measure ourselves, instead using SciPy's implementation \cite{Scipy} with default parameters.
 
@@ -87,11 +86,9 @@ Some agents play worse than others in all situations. Others might usually win, 
 
 To distinguish which agents were exploiting which how much, we measure cashflow; how much money was each agent giving over to each agent on average.
 
-\todo{IMAGE: insert example cashflow}
-
 Cashflow is computed individually per round, though conceptually it would not be impossible to compute it on average throughout. However, it requires extensive logs containing the individual results of every single hand, to track who wins what, which slows training considerably.
 
-\todo{expand on how we didn't use it}
+While useful for debugging specific early agents, cashflow was both too slow and requires too many games until convergence to be a useful metric in larger runs, so we did not use it in section \ref{Results}.
 
 \subsection{Strategy Vector}
 \label{StrategyVectorComputation}
@@ -107,9 +104,7 @@ Computing this vector takes a few minutes per agent, and represents the bulk of 
 
 Card ranks are calculated differently based on the number of cards. For pre-flop, we use monte-carlo simulation until convergence to generate a table of the victory likelihood of each possible pair, which lets us rank them from best to worse, and divide these into deciles.
 
-For flop, turns, and rivers, this is not feasible. Instead, we computed the card rank as evaluated by Treys \cite{Treys} directly, and compared that with a precomputed table of the number of possible hands that have higher rank. This is not perfectly equal to the likelihood of a hand winning, but much easier to compute, so we used this approach as an approximation. \todo{consider giving an example, here}
-
-\todo{IMAGE: card rank distributions: flop, turn, river}
+For flop, turns, and rivers, this is not feasible. Instead, we computed the card rank as evaluated by Treys \cite{Treys} directly, and compared that with a precomputed table of the number of possible hands that have higher rank. This is not perfectly equal to the likelihood of a hand winning, but much easier to compute, so we used this approach as an approximation.
 
 \subsection{Aggression and Tightness}
 
@@ -157,7 +152,7 @@ In doing so we also made changes to the algorithm. The biggest change was droppi
 
 Because the final reward of folding is always known ($r = -(current\ stake)$), we do not use Q-Learning to compute the outcome of folding, and the inverse of the current investment is used directly as the Q-function score of the folding action. This allows us to avoid having to explore randomly folding in the middle of games, which dramatically increases skill and prevents the agent from playing too cautiously because it knows that it will throw a fraction of games.
 
-Our input to all Q-Learning agents is the same 404-dimensional vector \todo{check this number} (as is also for SAC agents). It is composed of one-hot representation of the sorted hole cards, the sorted community cards (with an extra one-hot slot for "hidden"), which players have folded, which players put how much of their capital into the pot so far in the entire hand, which players put how much into the pot in this betting round, which player was the last to raise, which player is the current agent/where it is seated, which betting round it is in, and what is the card rank percentile of the current hand computed in the same way as described in section \ref{StrategyVectorComputation}.
+Our input to all Q-Learning agents is the same 404-dimensional vector (as is also for SAC agents). It is composed of one-hot representation of the sorted hole cards, the sorted community cards (with an extra one-hot slot for "hidden"), which players have folded, which players put how much of their capital into the pot so far in the entire hand, which players put how much into the pot in this betting round, which player was the last to raise, which player is the current agent/where it is seated, which betting round it is in, and what is the card rank percentile of the current hand computed in the same way as described in section \ref{StrategyVectorComputation}.
 
 We use two variants of action spaces in the results section, after some explorative experimentation with other variants: The Qlearn-8 agent with 8 different actions (call, raise 4, raise 8, raise 16, raise 32, raise 64, raise 100, raise 200), and a Qlearn-All agent with 201 different actions (call, raise 1, raise 2, \dots, raise 199, raise 200).
 
