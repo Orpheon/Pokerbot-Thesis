@@ -1,18 +1,20 @@
 \chapter{Conclusions}
 
 \section{Populations}
-Contrary to our initial expectation, we find that different populations do not lead to visible differences in strategy coverage, and matter far less than agent structure \todo{reference relevant section in results}.
+Contrary to our initial expectation, we find that different populations do not lead to visible differences in strategy coverage, and matter far less than agent structure (Figure \ref{AggTightDivision}, Figure \ref{AggTightAgentType}).
 
-We also find that matchup generation (climbing vs random) does not influence training strongly after sufficient rounds.
+We also find that matchup generation (climbing vs random) does not influence training strongly (Figure \ref{MatchupDistribution}).
 
 \section{Metrics}
-TrueSkill does not converge well, though it remains close \todo{reference}. It is also less insightful than other metrics, as it does not show whether an agent is robust or only good in certain matchups. 
-Additionally, the matchmaking method chosen has a huge influence on TrueSkill rankings \todo{reference}. This leads us to prefer using winnings to judge an agent's performance.
+TrueSkill does not converge to stability, though it gets close quickly (Figure \ref{TrueSkillCompare}), nor does it stay consistent between runs (Figure \ref{TrueSkillCompare2}). It is also less insightful than other metrics, as it does not show whether an agent is robust or only good in certain matchups. 
+Additionally, the matchmaking method chosen has a huge influence on TrueSkill rankings (Figure \ref{MatchupDistribution}). This leads us to prefer using winnings to judge an agent's performance.
 
-Comparison against baselines does not, as expected, correlate almost at all with performance against other agents. \todo{reference}
+\todo{Write on which metric comes out best re upsets}
 
 \section{Agents}
-SAC agents do not perform well \todo{reference}, despite significant effort and experimentation in the early stages of this project. It is possible this is because applying a continuous action space algorithm on poker was fundamentally a wrong approach, or because the entropy bonus was not handled correctly.
+SAC agents do not perform well (\ref{AgentGenerations}), despite significant effort and experimentation in the early stages of this project. It is possible this is because applying a continuous action space algorithm on poker was fundamentally a wrong approach, or because the entropy bonus was not handled correctly.
 
-The action space of the Q-Learning agents influences their behavior heavily, with the Qlearn-All agents playing more aggressively than any other architecture.
-One explanation for this is how exploration is handled; every action has a $\epsilon = 10\%$ chance of being replaced with a randomly selected non-folding action from the action space. The action space for qAll is composed of one call action and 199 raise actions, whereas qln5 uses one call action and only 7 raise actions. This means that qAll explores aggressive actions more than qln5, and also more than other agents like SAC. A further experiment would be to weigh this exploration likelihood by action type, such that calling is explored as much as raising in total. \todo{Standardize agent naming} \todo{More text on future work}
+\todo{Write on whether Qlearn-All beats Qlearn-8 or not}
+
+The action space of the Q-Learning agents influences their behavior heavily, with Qlearn-All playing more aggressively than any other architecture (\ref{AggTightAgentType}).
+One explanation for this is how exploration is handled; every action has a $\epsilon = 10\%$ chance of being replaced with a randomly selected non-folding action from the action space. The action space for Qlearn-All is composed of one call action and 199 raise actions, whereas Qlearn-8 uses one call action and only 7 \todo{check this number} raise actions. This means that Qlearn-All explores aggressive actions more than Qlearn-8, and also more than other agents like SAC. A further experiment would be to weigh this exploration likelihood by action type, such that calling is explored as much as raising in total. \todo{More text on future work}
