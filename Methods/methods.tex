@@ -11,7 +11,7 @@ An agent is a black-box system which receives observations of the current state 
 
 In a discrete environment, these actions along with external influences lead to a new state. A sequence of states is called a trajectory. Some states are associated with a reward; a real value that represents how desirable it is for the agent to be in that state. The agent seeks to maximize overall reward over its trajectories.
 
-Tasks are divided into episodic and continuous tasks \cite[chapters 3.3 \& 3.4]{Sutton}. An episodic task is a finite task with a well-defined end, e.g. playing a chess game. Rewards of episodic tasks are often only known at the end of a single episode, and an agent iterates through many such episodes to map out the state space. In contrast, a continuous task may run forever \todo{give examples}, and rewards trickle in over time.
+Tasks are divided into episodic and continuous tasks \cite[chapters 3.3 \& 3.4]{Sutton}. An episodic task is a finite task with a well-defined end, e.g. playing a chess game. Rewards of episodic tasks are often only known at the end of a single episode, and an agent iterates through many such episodes to map out the state space. In contrast, a continuous task may run forever (e.g. an exploration robot), and rewards trickle in at any time.
 
 A concept often used in continuous tasks is time discounting, where rewards in the far future are considered less important than rewards in the near future. Formally, let $r(s)$ denote the reward of particular state $s$, $t$ denote a particular time-step, $S$ a trajectory of states from time-steps $t_0$ to $t_{end}$, and $\gamma$ the time discount factor with $0 \leq \gamma \leq 1$ (commonly ~0.99). Then the total reward $R(S)$ can be defined as
 \begin{equation}
@@ -32,13 +32,11 @@ Denoting the action recommended by policy $\pi$ given state $s$ by $\pi(s)$, and
 
 (\ref{bellman_value}) and its variants is known as the Bellman equation \cite{BellmanEq}. Intuitively speaking, it states that the total reward following a policy from a specific state is the reward of that state, plus the discounted total reward from the next state after having acted. One can define a similar equation in probabilistic terms if the next state after acting isn't deterministic.
 
-\todo{elaborate why Q-function}
-
-This allows us to construct the Q-function of a state $s$ and action $a$, conditioned on policy $\pi$, defined as:
+The value function describes total reward starting from a state following a policy. However, it is helpful to consider the first action separately, and construct a so-called Q-function describing total reward following a policy after an arbitrary action $a$. We define it as:
 \begin{equation}
     Q_{\pi}(s, a) \coloneqq r(s) + \gamma V_{\pi}\big(Env(s, a)\big)
 \end{equation}
-It follows that
+It follows that:
 \begin{equation}
 \label{bellman_q}
     Q_{\pi}(s, a) = r(s) + \gamma Q_{\pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big)
@@ -86,7 +84,7 @@ To understand SAC's approach to exploration, it is necessary to introduce the co
 
 \todo{rethink arguments}
 \begin{equation}
-    H\big(\pi(s)\big) \coloneqq \sum_{a \in \pi(s)}{-P_{\pi, s}(a) log\big(P_{\pi, s}(a)\big)}
+    H(\pi, s) \coloneqq \sum_{a \in \pi(s)}{-P_{\pi, s}(a) log\big(P_{\pi, s}(a)\big)}
 \end{equation} where $P_{\pi, s}(a)$ is the probability of policy $\pi$ choosing action $a$ in state $s$. This can be understood as "The entropy of policy $\pi$ in state $s$ is the sum of $-log\big(P_{\pi, s}(a)\big)$ for every possible action, weighed by the probability of $\pi$ selecting that action".
 
 SAC implements so-called entropy regularization. Not only does it attempt to maximize long-term reward, but it also attempts to maximize long-term entropy, as high entropy means highly random action selection and thus a high amount of exploration. It does this by adding an entropy bonus to the update equations for both the Q-functions and the policy function, and by making the policy function stochastic and returning a distribution to sample from, not simply a value.

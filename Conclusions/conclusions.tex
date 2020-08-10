@@ -12,9 +12,9 @@ Additionally, the matchmaking method chosen has a huge influence on TrueSkill ra
 \todo{Write on which metric comes out best re upsets}
 
 \section{Agents}
-SAC agents do not perform well (\ref{AgentGenerations}), despite significant effort and experimentation in the early stages of this project. It is possible this is because applying a continuous action space algorithm on poker was fundamentally a wrong approach, or because the entropy bonus was not handled correctly.
+SAC agents do not perform well (Figure \ref{AgentGenerations}), despite significant effort and experimentation in the early stages of this project. It is possible this is because applying a continuous action space algorithm on poker was fundamentally a wrong approach, or because the entropy bonus was not handled correctly.
 
 \todo{Write on whether Qlearn-All beats Qlearn-8 or not}
 
-The action space of the Q-Learning agents influences their behavior heavily, with Qlearn-All playing more aggressively than any other architecture (\ref{AggTightAgentType}).
+The action space of the Q-Learning agents influences their behavior heavily, with Qlearn-All playing more aggressively than any other architecture (Figure \ref{AggTightAgentType}).
 One explanation for this is how exploration is handled; every action has a $\epsilon = 10\%$ chance of being replaced with a randomly selected non-folding action from the action space. The action space for Qlearn-All is composed of one call action and 199 raise actions, whereas Qlearn-8 uses one call action and only 7 \todo{check this number} raise actions. This means that Qlearn-All explores aggressive actions more than Qlearn-8, and also more than other agents like SAC. A further experiment would be to weigh this exploration likelihood by action type, such that calling is explored as much as raising in total. \todo{More text on future work}

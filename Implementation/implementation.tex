@@ -69,6 +69,14 @@ To generate a leaderboard from the winnings matrix, the following measures are u
 
 \todo{fix numbering}
 
+\subsection{Kendall's Tau}
+
+We use Kendall's Tau \cite{KendallTau} in section \ref{Results} as a measure of distance between rankings. This allows us to describe the similarity between rankings of different measures or between different divisions containing the same agents.
+
+\todo{short explanation of what kendall tau actually does}
+
+We did not implement the measure ourselves, instead using SciPy's implementation \cite{Scipy} with default parameters.
+
 \section{Strategy Analysis}
 
 We use several metrics to try to figure out how different agents behave, and how they differ in their behavior. Some of these are primarily for debugging, others for insight-generation.
