@@ -947,7 +947,7 @@
  \begin{singlespace} %
   \@starttoc{lot}\if@restonecol\twocolumn\fi %
  \end{singlespace} %
- \addtocontents{lot}{\hbox{TABLE}}
+ \addtocontents{lot}{}
 }
 
 

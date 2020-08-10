@@ -1,63 +1,371 @@
 \chapter{Results}
-This chapter discusses the results of the final run of the training and evaluation. In the final run, five divisions to train agents and three \todo{verify if correct} PermaEval divisions were used. All training divisions included one random agent and one call agent as baselines for training. Four different types of agents were used: Qlearn-8 , Qlearn-All, sac-Low, and sac-High. Following is the division setup used for the final run.
-\begin{itemize}
-    \item 1. Climbing division with baselines + Qlearn-8
-    \item 2. Climbing division with baselines + Qlearn-All
-    \item 3. Climbing division with baselines + sac-Low
-    \item 4. Climbing division with baselines + sac-High
-    \item 5. Climbing division with baselines + Qlearn-8 + Qlearn-All + sac-Low + sac-High
-    \item 6. Random division with baselines + Qlearn-All
-    \item 7. PermEvalSimilar division with trueskill leaderboard
-    \item 8. exactly the same as number 7, to verify if trueskill converges to the same result
-    \item 9. PermEvalDirect division with winnings leaderboard
-\end{itemize}
-The agents are trained over 2'000 rounds, which means that each agent inside the mixed division only plays an average of 500 rounds. The cloning was set to every 200 rounds, which generated a total of 90 agents over the whole run.
-The training was run on a computer with an Intel 6770k CPU, 16GB Ram, and an Nvidia 1070GTX GPU with 8GB VRAM. The training process of the final evaluation took around 44h runtime. All the rest of this chapter is based on the agents created during this final run.
 
-\todo{agents sort cards, note this somewhere}
+\section{Experiment Description}
+To demonstrate our results, we plotted results from one standardized run of multiple division configurations trained over 2'000 rounds of 10'000 hands each, for a total of 20'000'000 hands.
+
+All divisions included one random and one call agent as baselines, and all divisions cloned a new generation of teachers every 200 rounds, for a total of 90 agents over the whole run.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|| c | c | c ||} 
+ \hline
+ Name & Matchup Method & Agents \\ [0.5ex] 
+ \hline\hline
+ Qln8-Cl & Climbing & Qlearn-8 \\
+ QlnA-Cl & Climbing & Qlearn-All \\
+ SacL-Cl & Climbing & Sac-Low \\
+ SacH-Cl & Climbing & Sac-High \\
+ AllAg-Cl & Climbing & Qlearn-8, Qlearn-All, Sac-Low, Sac-High \\
+ QlnA-Rn & Random & Qlearn-All \\ [1ex] 
+ \hline
+\end{tabular}
+\caption{Training division configurations used in the standardized run}
+\label{RunDivisions}
+\end{table}
+
+We trained on a computer with an Intel 6770k CPU, 16GB Ram, and an Nvidia 1070GTX GPU with 8GB VRAM. The training process took about 44 hours in real-time.
+
+After training, we ran three PermaEval divisions to evaluate all agents according to the various metrics: one for all the winnings-based metrics, one for across-division TrueSkill, and a second TrueSkill to evaluate its consistency.
+
+We computed winnings with 10'000 hands per agent pairing of all 102 agents, for a total of 52'020'000 hands. For fairness of comparison, TrueSkill was evaluated for the same number of rounds.
 
 \section{Performance Metrics}
-After generating all agents, the three PermaEval divisions were run to evaluate the best agent for the competition. Because the agents have not been trained against agents from other divisions, this is was also a test of how well agents responded to unknown opponents. The following Subsections go further in depth on how well the two metrics (trueskill and winnings) performed on these agents.
 
-\subsection{TrueSkill}
-- results overview, what is the output
-- does it converge?
-- reproducibility
-- does matchup matter?
-- weird behavior
-- internal vs overall correlation
+\subsection{Leaderboards}
 
+\begin{table}[H]
+\centering
+\subcaptionbox{Sorted by TrueSkill (TS)}{
+\begin{tabular}{|| c | c | c | c | c ||} 
+ \hline
+ Name & TS & Mean & Med & 20-Pctl \\ [0.5ex] 
+ \hline\hline
+   52 &         91 &     6 &      58 &             89 \\
+   94 &         45 &    29 &      74 &             72 \\
+   30 &         63 &    82 &      71 &             84 \\
+   88 &         25 &    67 &       8 &             95 \\
+   68 &         89 &    63 &      39 &             14 \\
+   29 &         70 &    29 &      68 &             99 \\
+   99 &         90 &    66 &      53 &             47 \\
+   65 &         98 &    22 &      54 &             65 \\
+   90 &         49 &     5 &      94 &              5 \\
+    7 &         94 &    61 &      11 &             65 \\ [1ex] 
+ \hline
+\end{tabular}
+}
+\subcaptionbox{Sorted by Mean
+}{
+\begin{tabular}{|| c | c | c | c | c ||} 
+ \hline
+ Name & TS & Mean & Med & 20-Pctl \\ [0.5ex] 
+ \hline\hline
+   52 &         91 &     6 &      58 &             89 \\
+   94 &         45 &    29 &      74 &             72 \\
+   30 &         63 &    82 &      71 &             84 \\
+   88 &         25 &    67 &       8 &             95 \\
+   68 &         89 &    63 &      39 &             14 \\
+   29 &         70 &    29 &      68 &             99 \\
+   99 &         90 &    66 &      53 &             47 \\
+   65 &         98 &    22 &      54 &             65 \\
+   90 &         49 &     5 &      94 &              5 \\
+    7 &         94 &    61 &      11 &             65 \\ [1ex] 
+ \hline
+\end{tabular}
+}
+\subcaptionbox{Sorted by Median (Med)
+}{
+\begin{tabular}{|| c | c | c | c | c ||} 
+ \hline
+ Name & TS & Mean & Med & 20-Pctl \\ [0.5ex] 
+ \hline\hline
+   52 &         91 &     6 &      58 &             89 \\
+   94 &         45 &    29 &      74 &             72 \\
+   30 &         63 &    82 &      71 &             84 \\
+   88 &         25 &    67 &       8 &             95 \\
+   68 &         89 &    63 &      39 &             14 \\
+   29 &         70 &    29 &      68 &             99 \\
+   99 &         90 &    66 &      53 &             47 \\
+   65 &         98 &    22 &      54 &             65 \\
+   90 &         49 &     5 &      94 &              5 \\
+    7 &         94 &    61 &      11 &             65 \\ [1ex] 
+ \hline
+\end{tabular}
+}
+\subcaptionbox{Sorted by 20-Percentile (20-Pctl)
+}{
+\begin{tabular}{|| c | c | c | c | c ||} 
+ \hline
+ Name & TS & Mean & Med & 20-Pctl \\ [0.5ex] 
+ \hline\hline
+   52 &         91 &     6 &      58 &             89 \\
+   94 &         45 &    29 &      74 &             72 \\
+   30 &         63 &    82 &      71 &             84 \\
+   88 &         25 &    67 &       8 &             95 \\
+   68 &         89 &    63 &      39 &             14 \\
+   29 &         70 &    29 &      68 &             99 \\
+   99 &         90 &    66 &      53 &             47 \\
+   65 &         98 &    22 &      54 &             65 \\
+   90 &         49 &     5 &      94 &              5 \\
+    7 &         94 &    61 &      11 &             65 \\ [1ex] 
+ \hline
+\end{tabular}
+}
+\label{TopAgentsMetrics}
+\caption{Top 10 agents sorted by each metric}
+\end{table}
 
-\subsection{Winnings}
-- result overview, what is the output
-- reproducibility
-- observed weird behaviors
-- sorted by?
-- correlation internal vs overall
-- how to rank?
- - average
- - mean
- - pctl
-- what sorting makes sense?
- - squared errors
-- sorting vs n upsets
-- exploiters -> ? where expected winner lost with highest negative
+\begin{table}[H]
+\centering
+\begin{tabular}{|| c | c ||} 
+ \hline
+ Metric & \% Upsets \\ [0.5ex] 
+ \hline\hline
+    TrueSkill & 1 \\
+    Mean & 1 \\
+    Median & 1 \\
+    20-Percentile & 1 \\ [1ex]
+ \hline
+\end{tabular}
+\label{MetricsUpsets}
+\caption{\% Upsets per metric}
+\end{table}
 
+\begin{code}
+    -discussion
+    -correlation (kendall-tau)
+    -sorting by n upsets
+\end{code}
+
+\begin{figure}[H]
+\centering
+\subcaptionbox{
+    Colored by TrueSkill
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\subcaptionbox{
+    Colored by Mean
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\subcaptionbox{
+    Colored by Median
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\subcaptionbox{
+    Colored by 20-Percentile
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\caption{Aggression and Tightness colored by rank for each metric}
+\label{AggTightRank}
+\end{figure}
+
+\begin{code}
+    -discussion
+\end{code}
+
+\subsection{TrueSkill Coherence}
+\begin{figure}[H]
+\centering
+\subcaptionbox{
+    TrueSkill over time in the first PermaEval division
+}{
+    \includegraphics[width=\linewidth]{Results/figures/placeholder.png}
+}
+\subcaptionbox{
+    TrueSkill over time in the second PermaEval division
+}{
+    \includegraphics[width=\linewidth]{Results/figures/placeholder.png}
+}
+\caption{TrueSkill over time in both PermaEval divisions, compared}
+\label{TrueSkillCompare}
+\end{figure}
+\begin{code}
+    - discussion
+\end{code}
+\begin{figure}[H]
+\centering
+    \includegraphics[width=0.8\linewidth]{Results/figures/placeholder.png}
+\caption{Agent rank in both TrueSkill PermaEval divisions}
+\label{AggTightRank}
+\end{figure}
+\begin{code}
+    - (kendall-tau)
+    - trueskill a shit
+\end{code}
 
 \section{Agents}
--how do the various architectures do in training
-    -convergence speed
-    -skill cap
-    -dependence on features
-    -consistency
+\begin{table}[H]
+\centering
+\begin{tabular}{|| c | c | c | c | c ||} 
+ \hline
+ TrueSkill & Mean & Median & 20-Percentile \\ [0.5ex] 
+ \hline\hline
+    96 &    29 &       9 &             13 \\
+    47 &     4 &      55 &             21 \\
+     4 &    78 &      89 &             90 \\
+    58 &    88 &      99 &             16 \\
+    31 &    72 &      91 &             42 \\
+    23 &    35 &      64 &             53 \\
+    47 &    59 &       9 &              0 \\
+    24 &    49 &      50 &             86 \\
+    97 &    51 &       7 &              9 \\
+    78 &     3 &      33 &             40 \\ [1ex] 
+ \hline
+\end{tabular}
+\label{TypeRankings}
+\caption{Agent type of the top 10 agents according to each metric}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\subcaptionbox{
+    Ranked by TrueSkill
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\subcaptionbox{
+    Ranked by Mean
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\subcaptionbox{
+    Ranked by Median
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\subcaptionbox{
+    Ranked by 20-Percentile
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\caption{Agent distribution by type and rank [VIOLINPLOT]}
+\label{AgentTypeDistribution}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=0.8\linewidth]{Results/figures/placeholder.png}
+\caption{Aggression and Tightness, colored by agent type}
+\label{AggTightAgentType}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\subcaptionbox{
+    Ranked by TrueSkill
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\subcaptionbox{
+    Ranked by Mean
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\subcaptionbox{
+    Ranked by Median
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\subcaptionbox{
+    Ranked by 20-Percentile
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\caption{Agent evolution over time by type and rank [LINE GENERATIONPLOT]}
+\label{AgentGenerations}
+\end{figure}
+
+\begin{code}
+    - convergence speed
+    - skill cap
+\end{code}
 
 \section{Populations}
--how do the various population do in training
-    -convergence speed
-    -skill cap
-    -dependence on features
-    -consistency
+\begin{table}[H]
+\centering
+\begin{tabular}{|| c | c | c | c | c ||} 
+ \hline
+ TrueSkill & Mean & Median & 20-Percentile \\ [0.5ex] 
+ \hline\hline
+    96 &    29 &       9 &             13 \\
+    47 &     4 &      55 &             21 \\
+     4 &    78 &      89 &             90 \\
+    58 &    88 &      99 &             16 \\
+    31 &    72 &      91 &             42 \\
+    23 &    35 &      64 &             53 \\
+    47 &    59 &       9 &              0 \\
+    24 &    49 &      50 &             86 \\
+    97 &    51 &       7 &              9 \\
+    78 &     3 &      33 &             40 \\ [1ex] 
+ \hline
+\end{tabular}
+\label{DivisionRankings}
+\caption{Agent division of the top 10 agents according to each metric}
+\end{table}
 
-\subsection{Divergence of Populations}
--how convergent are league setups?
-    -do different leagues "drift apart" or cover mostly the same strats
+\begin{figure}[H]
+\centering
+    \includegraphics[width=0.8\linewidth]{Results/figures/placeholder.png}
+\caption{Aggression and Tightness, colored by agent type}
+\label{AggTightAgentType}
+\end{figure}
+
+\begin{code}
+    - discussion (note that mixed league had less games per agent, but same compute)
+\end{code}
+
+\begin{figure}[H]
+\centering
+\subcaptionbox{
+    Ranked by TrueSkill
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\subcaptionbox{
+    Ranked by Mean
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\subcaptionbox{
+    Ranked by Median
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\subcaptionbox{
+    Ranked by 20-Percentile
+}{
+    \includegraphics[width=0.45\linewidth]{Results/figures/placeholder.png}
+}
+\caption{Agent distribution by matchup type}
+\label{MatchupDistribution}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|| c | c ||} 
+ \hline
+ Division & Kendall-Tau distance \\ [0.5ex] 
+ \hline\hline
+     Qln8-Cl & 1 \\
+     QlnA-Cl & 1 \\
+     SacL-Cl & 1 \\
+     SacH-Cl & 1 \\
+     AllAg-Cl & 1 \\
+     QlnA-Rn & 1 \\ [1ex] 
+ \hline
+\end{tabular}
+\label{DivisionInternalExternal}
+\caption{Kendall-Tau distance between internal division rankings and PermaEval}
+\end{table}
+
+\begin{code}
+    - discussion
+    - how overfitted are they
+    - are internal ratings representative of external ratings?
+\end{code}
+
+%- [TABLE,]
+%    - exploiters -> ? where expected winner lost with highest negative

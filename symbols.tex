@@ -15,6 +15,8 @@
   \item[$V^*(s)$] The value, or total reward, of following the optimal policy starting from state $s$\\
   \item[$Q^*(s, a)$] The value, or total reward, of following the optimal policy after acting $a$ from state $s$\\
   \item[$\epsilon$] The chance of acting randomly to allow exploration in Q-Learning\\
+  \item[$\psi$] The polyak averaging constant\\
   \item[$P_{\pi, s}(a)$] The probability of policy $\pi$ selecting action $a$ in state $s$\\
-  \item[$\alpha$] The relative weight of the entropy bonus to the reward in Soft Actor-Critic\\
+  \item[$\alpha$] The Soft Actor-Critic temperature, the relative weight of the entropy bonus to the reward\\
+  \item[$\beta$] The "skill chain length" of TrueSkill, skill rating difference representing a 76\% win likelihood
 \end{description}
