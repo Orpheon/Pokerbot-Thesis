@@ -148,7 +148,7 @@ As one might expect, mean diverges from the other metrics most. We believe this 
 
 However, this difference is not visible in the strategy plots seen in figure \ref{AggTightRank}. Instead here it is TrueSkill that is an outlier, as it ranks tight and passive agents as worse overall than all others, though mean also considers them worse than the other two.
 
-This would lead to the hypothesis that tight and passive players, which we will see later (section \ref{ResultsAgents}) are mostly SAC agents, play consistently ok in their worst games (decent 20pctl and median), but rarely take advantage of good games (low mean), and also rarely win matches (low TrueSkill). This is consistent with the definition of passivity and tightness, though one would expect the aggressive and loose players to have lower 20pctl scores, which we do not observe.
+This would lead to the hypothesis that tight and passive players, which we will see later (section \ref{ResultsAgents}) are mostly SAC agents, play consistently ok in their worst games (decent 20pctl and median), but rarely take advantage of good games (low mean), and also rarely win matches (low TrueSkill). This is consistent with the definition of passivity and tightness, though one would expect the aggressive and loose players to have lower 20pctl scores, which we do not observe in figure \ref{AggTightRank}.
 
 
 \begin{figure}[H]
@@ -158,7 +158,7 @@ This would lead to the hypothesis that tight and passive players, which we will 
 \label{UpsetsPlot}
 \end{figure}
 
-This plot demonstrates how good these metrics are at predicting actual win/loss in the 3v3 evaluation. We can see that TrueSkill as the only metric specifically optimizing for win probability performs best, closely followed by median.
+Figure \ref{UpsetsPlot} demonstrates how good these metrics are at predicting the winner in a 3v3 evaluation. We can see that TrueSkill as the only metric specifically optimizing for win probability performs best, closely followed by median.
 
 
 \subsection{TrueSkill Coherence}
@@ -179,7 +179,7 @@ This plot demonstrates how good these metrics are at predicting actual win/loss 
 \label{TrueSkillCompare}
 \end{figure}
 
-TrueSkill did not converge quickly or well in preliminary experiments, so to establish that it is at least consistent we computed the full ranking twice.
+TrueSkill did not converge quickly or well in preliminary experiments, so to establish that it is at least consistent we computed the full ranking twice. Both runs and the
 
 While the broad tendencies stabilize quickly, we still observe agents swapping or even completely changing their skill rating by as much as 40 points after the first 500 rounds, despite all agents being static and always playing at the same skill level. This does not bode well for convergence.
 
