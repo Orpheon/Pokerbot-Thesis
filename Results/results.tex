@@ -179,7 +179,7 @@ Figure \ref{UpsetsPlot} demonstrates how good these metrics are at predicting th
 \label{TrueSkillCompare}
 \end{figure}
 
-TrueSkill did not converge quickly or well in preliminary experiments, so to establish that it is at least consistent we computed the full ranking twice. Both runs and the
+TrueSkill did not converge quickly or well in preliminary experiments, so to establish that it is at least consistent we computed the full ranking twice. Both runs with the changing TrueSkill estimates can be seen in figure \ref{TrueSkillCompare}.
 
 While the broad tendencies stabilize quickly, we still observe agents swapping or even completely changing their skill rating by as much as 40 points after the first 500 rounds, despite all agents being static and always playing at the same skill level. This does not bode well for convergence.
 
@@ -190,7 +190,7 @@ While the broad tendencies stabilize quickly, we still observe agents swapping o
 \label{TrueSkillCompare2}
 \end{figure}
 
-Here we see the rank of all agents as a scatterplot. Were TrueSkill perfectly consistent, this would be a straight line. Instead we see a mystifying result of it being dependent on agent types; SAC agents appear to play inconsistently when judged by TrueSkill (i.e. ranking after matches), but other agents are consistent, if not perfectly so. This seems less an artifact of TrueSkill and more an issue with SAC agents themselves.
+Figure \ref{TrueSkillCompare2} shows the rank of all agents as estimated by the two runs of TrueSkills. Were TrueSkill perfectly consistent, this would be a straight line. Instead we see a mystifying result of it being dependent on agent types; SAC agents appear to play inconsistently when judged by TrueSkill (i.e. ranking after matches), but other agents are consistent, if not perfectly so. This seems less an artifact of TrueSkill and more an issue with SAC agents themselves.
 
 \section{Agents}
 \label{ResultsAgents}
@@ -203,7 +203,7 @@ How do the different agent architectures compare?
 \label{AggTightAgentType}
 \end{figure}
 
-Agent architectures appear paramount for their strategy. This plot mixes results from multiple divisions (i.e. different seeds and different opponents), which does not prevent a remarkable convergence by agent type.
+Agent architectures appear paramount for their strategy. Figure \ref{AggTightAgentType} shows results from multiple divisions (i.e. different seeds and different opponents), which does not prevent a remarkable convergence by agent type.
 
 We see that Qlearn-All almost never calls, and either folds or raises, leaning towards more raises. Qlearn-8 shares a similar tendency but not nearly as strong (the scale of \textit{Distorted Aggression} is hyperbolic towards the top). We believe this is because of implementation details of exploration, more in section \ref{ConclusionAgents}.
 
