@@ -3,7 +3,7 @@
 \section{Experiment Description}
 To demonstrate our results, we plotted results from one standardized run of multiple division configurations trained over 2'000 rounds of 10'000 hands each, for a total of 20'000'000 hands.
 
-All divisions included one random and one call agent as baselines, and all divisions cloned a new generation of teachers every 200 rounds, for a total of 90 agents over the whole run. The table \ref{RunDivisions} shows the different training division configurations.
+All divisions included one random and one call agent as baselines, and all divisions cloned a new generation of teachers every 200 rounds, for a total of 90 agents over the whole run. Table \ref{RunDivisions} shows the different training division configurations.
 
 \begin{table}[h!]
 \centering
@@ -117,7 +117,7 @@ First, we compare different metrics in consistency and strategy clustering, and 
 \label{TableTopAgentsMetrics}
 \end{table}
 
-As can be seen in the four tables \ref{TableTopAgentsMetrics} see that the four metrics we used disagree on which agents were best. There are a handful of agents (e.g. \textit{seeker}, \textit{exam}, \textit{brick}, or \textit{suitcase}) that show up in most leaderboards near the top, and it is from these agents that we selected candidates for the AIcrowd competition (specifically, \textit{seeker} was our final agent), but overall there is substantial disagreement.
+We can see in Table \ref{TableTopAgentsMetrics} that the four metrics we used disagree on which agents were best. There are a handful of agents (e.g. \textit{seeker}, \textit{exam}, \textit{brick}, or \textit{suitcase}) that show up in most leaderboards near the top, and it is from these agents that we selected candidates for the AIcrowd competition (specifically, \textit{seeker} was our final agent), but overall there is substantial disagreement.
 
 As one might expect, mean diverges from the other metrics most. We believe this is because mean does not reward consistency, e.g. losing a bit often and winning big sometimes is a good strategy for mean optimization. All three other metrics discourage it, and reward worst-case consistency.
 \begin{figure}[H]
@@ -146,9 +146,9 @@ As one might expect, mean diverges from the other metrics most. We believe this 
 \label{AggTightRank}
 \end{figure}
 
-However, this difference is not visible in the strategy plots seen in figure \ref{AggTightRank}. Instead here it is TrueSkill that is an outlier, as it ranks tight and passive agents as worse overall than all others, though mean also considers them worse than the other two.
+However, this difference is not visible in the strategy plots seen in Figure \ref{AggTightRank}. Instead here it is TrueSkill that is an outlier, as it ranks tight and passive agents as worse overall than all others, though mean also considers them worse than the other two.
 
-This would lead to the hypothesis that tight and passive players, which we will see later (section \ref{ResultsAgents}) are mostly SAC agents, play consistently ok in their worst games (decent 20pctl and median), but rarely take advantage of good games (low mean), and also rarely win matches (low TrueSkill). This is consistent with the definition of passivity and tightness, though one would expect the aggressive and loose players to have lower 20pctl scores, which we do not observe in figure \ref{AggTightRank}.
+This would lead to the hypothesis that tight and passive players, which we will see later (section \ref{ResultsAgents}) are mostly SAC agents, play consistently ok in their worst games (decent 20pctl and median), but rarely take advantage of good games (low mean), and also rarely win matches (low TrueSkill). This is consistent with the definition of passivity and tightness, though one would expect the aggressive and loose players to have lower 20pctl scores, which we do not observe.
 
 
 \begin{figure}[H]
@@ -179,7 +179,7 @@ Figure \ref{UpsetsPlot} demonstrates how good these metrics are at predicting th
 \label{TrueSkillCompare}
 \end{figure}
 
-TrueSkill did not converge quickly or well in preliminary experiments, so to establish that it is at least consistent we computed the full ranking twice. Both runs with the changing TrueSkill estimates can be seen in figure \ref{TrueSkillCompare}.
+TrueSkill did not converge quickly or well in preliminary experiments, so to establish that it is at least consistent we computed the full ranking twice. Both runs with the changing TrueSkill estimates can be seen in Figure \ref{TrueSkillCompare}.
 
 While the broad tendencies stabilize quickly, we still observe agents swapping or even completely changing their skill rating by as much as 40 points after the first 500 rounds, despite all agents being static and always playing at the same skill level. This does not bode well for convergence.
 
@@ -237,11 +237,11 @@ In contrast, SAC agents play aggressive only when tight, or loose when passive. 
   20 &  Qlearn-All &    Qlearn-8 &  Qlearn-All &    Qlearn-All \\[1ex] 
  \hline
 \end{tabular}
-\label{TypeRankings}
 \caption{Agent type of the top 20 agents according to each metric}
+\label{TypeRankings}
 \end{table}
 
-The first immediate observation when looking at is that no architecture other than the two Qlearns was able to compete.
+Looking at Table \ref{TypeRankings} the first immediate observation is that no architecture other than the two Qlearns was able to compete.
 
 The second is that while Qlearn-8 and Qlearn-All seem approximately evenly matched in most metrics, in mean Qlearn-All is dominant, earning more money on average despite not winning more often. This is consistent with Qlearn-All's higher aggression.
 
@@ -271,7 +271,7 @@ The second is that while Qlearn-8 and Qlearn-All seem approximately evenly match
 \label{AgentTypeDistribution}
 \end{figure}
 
-We can see that the relative performance of SAC agents differs depending on metrics; ranked by mean or median they outperform call agents, but ranked by TrueSkill only the best of them do.
+Figure \ref{AgentTypeDistribution} shows how the relative performance of SAC agents differs depending on metrics; ranked by mean or median they outperform call agents, but ranked by TrueSkill only the best of them do.
 
 We can also see that 20pctl is left-skewed, with the best agents being closer to the norm than the worst agents. This makes it difficult to compare the best half, but it allows some insight in the worst; we see that Qlearn-All is surprisingly good, even with its worst untrained agents, in its worst 20\% of matches, despite extreme aggression.
 
@@ -301,7 +301,7 @@ We can also see that 20pctl is left-skewed, with the best agents being closer to
 \label{AgentGenerations}
 \end{figure}
 
-Each agent left clones of itself every 200 iterations. Comparing these clones by generation allows us to see how agents improved over time.
+Each agent left clones of itself every 200 iterations. Comparing these clones by generation allows us to see how agents improved over time. Figure \ref{AgentGenerations} shows this progress using the four metrics.
 
 On first sight, it looks like they haven't. Improvement is visible in TrueSkill for the Qlearn agents, as well as small improvements in the other metrics, but overall this is less improvement than expected.
 
@@ -339,11 +339,11 @@ How important are division populations?
   20 &   QlnA-Cl &   Qln8-Cl &   QlnA-Rn &       QlnA-Rn \\ [1ex] 
  \hline
 \end{tabular}
-\label{DivisionRankings}
 \caption{Agent division of the top 20 agents according to each metric}
+\label{DivisionRankings}
 \end{table}
 
-Climbing appears only marginally better than Random matching, though enough to be relevant. This accords with smaller experiments we did before this run. It also seems that mixing all agents decreases performance overall, indicating that overfitting is not (yet) an issue. It might be that competition against better agents is important, but its relative under-performance may also be a symptom of its lower training time; because the mixed division has more agents, the training rounds are split between them, leaving each individual agent with less rounds per cloning generation.
+According to Table \ref{DivisionRankings} Climbing appears only marginally better than Random matching, though enough to be relevant. This accords with smaller experiments we did before this run. It also seems that mixing all agents decreases performance overall, indicating that overfitting is not (yet) an issue. It might be that competition against better agents is important, but its relative under-performance may also be a symptom of its lower training time; because the mixed division has more agents, the training rounds are split between them, leaving each individual agent with less rounds per cloning generation.
 
 \begin{figure}[H]
 \centering
@@ -352,7 +352,7 @@ Climbing appears only marginally better than Random matching, though enough to b
 \label{AggTightDivision}
 \end{figure}
 
-Compared with Figure \ref{AggTightAgentType}, this plot is more mixed. In particular, the mixed division (AllAg-Cl) is spread across the entire plot, and each division specialized to an architecture covers the area of that architecture. This reinforces the concept that strategy space location depends mostly on architecture choice and not on population.
+Compared with Figure \ref{AggTightAgentType}, Figure \ref{AggTightDivision} is more mixed. In particular, the mixed division (AllAg-Cl) is spread across the entire plot, and each division specialized to an architecture covers the area of that architecture. This reinforces the concept that strategy space location depends mostly on architecture choice and not on population.
 
 \begin{figure}[H]
 \centering
@@ -380,7 +380,7 @@ Compared with Figure \ref{AggTightAgentType}, this plot is more mixed. In partic
 \label{MatchupDistribution}
 \end{figure}
 
-Taking a closer look at Climbing vs Random for the same agent architecture, it looks like Random is more robust in the final evaluation (against all agents), whereas the best Climbing agents earn more money.
+Figure \ref{MatchupDistribution} takes a closer look at Climbing vs Random for the same agent architecture. Random is more robust in the final evaluation (against all agents), whereas the best Climbing agents earn more money.
 
 \begin{figure}[H]
 \centering
@@ -418,7 +418,7 @@ Taking a closer look at Climbing vs Random for the same agent architecture, it l
 \label{DivisionConsistency}
 \end{figure}
 
-To estimate how much agents in each division overfit, we compared the internal ranking of agents in each division with the global ranking of those agents. Ideally, these would be a straight line from bottom-left to top-right.
+To estimate how much agents in each division overfit, we compared the internal ranking of agents in each division with the global ranking of those agents. Figure \ref{DivisionConsistency} shows this relation. Ideally, the rankings would form a straight line from bottom-left to top-right.
 
 It seems very little overfit happens, as these results echo those of Figure \ref{TrueSkillCompare2}, meaning that most variation here is expected simply due to TrueSkill seed.
 
