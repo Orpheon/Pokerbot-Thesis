@@ -1,17 +1,55 @@
 \chapter{Theoretical Methods}
 
-\todo{find all eg. -> e.g. same for ie. -> i.e.}
+\section{Poker}
+No-Limit Texas Hold'em Poker is a turn-based game where each player starts out with a fixed amount of chips they can bet in each round (called a hand in this thesis) and the winner of the hand collects all bets. The total winnings and loss of each player are summed over all hands, and whichever player ends up with the highest total wins.
+
+\subsection{Cards}
+The game is played is played with a standard 52-card french deck without jokers. At the start of the game each player receives two cards called hole cards that should not be revealed to the other players. Over the course of the game five more cards are revealed to all players, called community cards. If there is a contest, the winner is determined by hand strength, which depends on patterns of cards between all the cards a player can see \cite{HoldemHandvalues}.
+
+\subsection{Positions}
+Before the players are dealt their cards, one player receives the dealer button. This sets the betting order. Two other important roles are the small and big blind, who are forced to place an initial bet before the game starts. The seating positions are as follows:
+\begin{itemize}
+    \item Dealer Button (BTN)
+    \item Small Blind (SB)
+    \item Big Blind (BB)
+    \item Early Position (EP), or also called Under the Gun (UTG) because this player is the first to act during the first phase.
+    \item Middle Position (MP)
+    \item Cut Off (CO)
+\end{itemize}
+
+\subsection{Actions}
+A player can take one of three actions: fold, call or raise.
+
+Folding means that the player drops out of the hand, loses their current investment, is not eligible to win the pot, cannot take any actions until the next hand, but does not have to reveal their hole cards.
+
+Calling is when a player matches the current highest bet, also called a check if no other player has raised during this phase.
+
+Raising is when a player increases the current highest bet by raising their bet over the previous highest bet. There is a minimum amount of money that the player can raise by, to prevent long games where one player after another raises by a minuscule amount. A raise at the start of a betting round is also called a bet.
+
+\subsection{Phases}
+Each hand is divided into five phases. During the first four, all players that have not folded have to either call, raise or fold until either everyone but one player has folded, all remaining players check, or every player after the last raise has either called or folded.
+
+\begin{itemize}
+  \item Preflop (Each player receives their hole cards, the EP starts with betting)
+  \item Flop (The first three community cards are revealed, the SB starts with betting)
+  \item Turn (The fourth community card is revealed, the SB starts with betting)
+  \item River (The fifth and last community card is revealed, the SB starts with betting)
+  \item Showdown (This phase starts when either the river phase finishes or when a player goes all-in and at least one player does not fold. During this phase all players that have not folded yet reveal their cards and the player with the strongest hand receives the pot. If multiple players have equal hand strengths, the pot is divided equally between them.)
+\end{itemize}
+
+\subsection{Competition Rules}
+The competition specified the rules more in depth so that every team could train their agents accordingly. The python framework used is called PyPokerEngine \cite{Pypokerengine} and has been modified for the challenge to use Treys \cite{Treys} for faster performance. There is no guarantee that hands are played in order because some parts might be parallelized to speed up evaluation. The SB is set to 1 chip and the BB to 2 chips, each player starts every hand with 200 chips. Each team can submit their agent twice per week, which is then directly evaluated against simple agents called baselines. This baseline evaluation runs over 10'000 hands and the team receives the result as soon as the evaluation is completed. If the evaluation fails for any reason (software bugs, timeouts, etc.) it does not count against the number of weekly evaluations and the last successful submission remains the current entry. Twice every week the current agents of the competing teams are pitted against each other and three agents submitted by the supervisors. They are evaluated over 100'000 hands and the results are displayed on a public leaderboard.
 
 \section{Reinforcement Learning}
 \label{ReinforcementLearningChapter}
 \subsection{Basic Concepts}
-Reinforcement learning is a subfield of machine learning where an agent optimizes its actions in a sequential task to maximize some reward signal. It does not require a dataset nor labels, but instead an explorable simulation.
+Reinforcement learning is a subfield of machine learning in which an agent optimizes its actions in a sequential task to maximize some reward signal. It does not require a dataset nor labels, but instead an explorable simulation. This differentiates it from both supervised learning, which requires labels, and unsupervised learning, which does not have a reward signal.
 
 An agent is a black-box system which receives observations of the current state (usually in the form of a numeric vector), processes this according to an internal policy function (which can have many representations), and outputs selected actions (as a numeric vector).
 
 In a discrete environment, these actions along with external influences lead to a new state. A sequence of states is called a trajectory. Some states are associated with a reward; a real value that represents how desirable it is for the agent to be in that state. The agent seeks to maximize overall reward over its trajectories.
 
-Tasks are divided into episodic and continuous tasks \cite[chapters 3.3 \& 3.4]{Sutton}. An episodic task is a finite task with a well-defined end, e.g. playing a chess game. Rewards of episodic tasks are often only known at the end of a single episode, and an agent iterates through many such episodes to map out the state space. In contrast, a continuous task may run forever (e.g. an exploration robot), and rewards trickle in at any time.
+Tasks are divided into episodic and continuous tasks \cite[chapters 3.3 \& 3.4]{Sutton}. An episodic task is a finite task with a well-defined end, e.g. playing a chess game. Rewards of episodic tasks are often only known at the end of a single episode, and an agent iterates through many such episodes to map out the state space. In contrast, a continuous task may run forever (e.g. an exploration robot) and rewards trickle in at any time.
 
 A concept often used in continuous tasks is time discounting, where rewards in the far future are considered less important than rewards in the near future. Formally, let $r(s)$ denote the reward of particular state $s$, $t$ denote a particular time-step, $S$ a trajectory of states from time-steps $t_0$ to $t_{end}$, and $\gamma$ the time discount factor with $0 \leq \gamma \leq 1$ (commonly ~0.99). Then the total reward $R(S)$ can be defined as
 \begin{equation}
@@ -47,7 +85,7 @@ We additionally define $V^*(s)$ and $Q^*(s, a)$, respectively, as the value and 
 The core concept behind (deep) Q-Learning is to construct a policy using a function approximator (e.g. a neural network), training this approximator as a supervised learning problem to satisfy (\ref{bellman_q}), and always select the action with the highest predicted reward \cite{QlearningMnih}.
 Over time, the policy will converge to $Q^*(s, a)$.\cite{Qlearn_convergence}
 
-To train an approximator based on itself recursively is highly unstable, so it is common to use a frozen copy of the Q-function on the right-hand side of the equation. This copy is updated less frequently, or updated with smoothing applied through polyak averaging ($0 \leq \psi \leq 1$):
+To train an approximator based on itself recursively is highly unstable, so it is common to use a frozen copy of the Q-function on the right-hand side of the equation. This copy is updated less frequently, or updated with smoothing applied through so-called polyak averaging ($0 \leq \psi \leq 1$):
 \begin{equation}
     Q_{\pi}^{copy} \coloneqq \psi Q_{\pi} + (1 - \psi) Q_{\pi}^{copy}
 \end{equation}
@@ -66,15 +104,13 @@ Q_{\pi}\Big(Env(s, a), \pi\big(Env(s, a)\big)\Big) &\mbox{otherwise}
 \end{equation}
 which is no longer recursive, and thus easier to train.
 
-Q-Learning, as presented so far, is maximally exploitative; it never acts in what it believes might are suboptimal paths to explore what they are actually like. In isolation, this means that Q-Learning is susceptible to honing immediately on a suboptimal policy and never improving. To remedy this, we add a certain level of noise to the actions, such that an agent selects a random action with probability $\epsilon$ \cite[chapters 2.2 \& 2.3]{Sutton}. The size of $\epsilon$ controls the exploration-exploitation trade off for Q-Learning, and $\epsilon$ is set to 0 in finished/non-training agents.
+Q-Learning, as presented so far, is maximally exploitative; it never acts in what it believes are suboptimal paths to explore what they are actually like. In isolation, this means that Q-Learning is susceptible to honing immediately on a suboptimal policy and never improving. To remedy this, we add a certain level of noise to the actions, such that an agent selects a random action with probability $\epsilon$ \cite[chapters 2.2 \& 2.3]{Sutton}. The size of $\epsilon$ controls the exploration-exploitation trade off for Q-Learning, and $\epsilon$ is set to 0 in finished/non-training agents.
 
-\todo{match-up and trade-off without -}
+A significant limitation of Q-Learning in practice is that the Q-function must be evaluated for each action to compare expected total reward. This does not scale performance-wise to large action spaces, and cannot be applied on continuous action spaces, restricting domains on which it can be applied.
 
-A significant limitation of Q-Learning in practice is that the Q-function must be evaluated for each action to compare expected total reward. This does not scale performance-wise to large action spaces, and cannot be applied on continuous action spaces.
+\subsection{Soft Actor-Critic (SAC)}
 
-\subsection{Soft Actor-Critic}
-
-Soft Actor-Critic is a recent evolution of several deep reinforcement learning algorithms building off of Q-Learning. It can handle both discrete and continuous action spaces, it can handle the exploration/exploitation trade off in a principled way, and it boasts more stable convergence properties than many of its competitors \cite{SAC_main}.
+Soft Actor-Critic is a recent evolution of several deep reinforcement learning algorithms improving on Q-Learning. It can handle both discrete and continuous action spaces, it can handle the exploration/exploitation trade off in a principled way, and it boasts more stable convergence properties than many of its competitors \cite{SAC_main}.
 
 Like Q-Learning, SAC trains a Q-function that attempts to predict the value of an action given a state and policy. Unlike Q-Learning, it also trains a policy network, that given a state outputs an action, and is trained to maximize the current Q-function. This removes the scaling issues that plagued Q-Learning, and allows continuous action spaces.
 
@@ -98,9 +134,8 @@ The policy function does not return an arbitrary distribution. For simplicity, t
 
 \section{TrueSkill}
 
-TrueSkill is a skill rating system developed by Microsoft in 2007 that attempts to measure relative skill of players in repeated games \cite{TrueSkill_original} \cite{TrueSkill_blog}.
+TrueSkill is a skill rating system developed by Microsoft in 2007 that attempts to measure relative skill of players over the course of many games played \cite{TrueSkill_original} \cite{TrueSkill_blog}.
 
-\todo{reword section}
 It supports flexible team setups, draws, and more than 2 teams. It also boasts a solid theoretical foundation. This makes it more suitable for Texas Hold'em (a 6-player free-for-all) than ELO \cite{Elo} or other common skill ranking systems that are designed for two competing teams.
 
 TrueSkill assumes each player has a numeric skill rating. The delta between two players' skill ratings represents the likelihood of one player winning. The scale involved is arbitrary and defined through the choice of a parameter $\beta$, where a player being $\beta$ points above another implies that player has an approximately 76\% chance\footnote{Specifically, $\Phi\left(\frac{1}{\sqrt{2}}\right)$, where $\Phi(x)$ is the cumulative density function of the standard normal distribution.} of winning if matched against each other.

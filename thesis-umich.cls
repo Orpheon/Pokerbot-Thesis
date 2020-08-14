@@ -5,6 +5,8 @@
 %%   <http://www.rackham.umich.edu/downloads/
 %%               oard-dissertation-format-guidelines.pdf>
 %%
+%% EDIT: Actually, we modified this further to fit our needs,
+%% so actually probably not consistent with Rackham guidelines anymore
 %% This class is based on the LaTeX template provided at
 %%   <http://aoss.engin.umich.edu/pages/current/dissertation-template>
 %%
@@ -919,7 +921,7 @@
  \begin{singlespace} %
   \@starttoc{lof}\if@restonecol\twocolumn\fi %
  \end{singlespace} %
- \addtocontents{lof}{\hbox{FIGURE}}
+ \addtocontents{lof}{}
 }
 
 
